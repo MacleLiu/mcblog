@@ -1,6 +1,7 @@
 package modles
 
 import (
+	"mcblog/utils/encrypt"
 	"mcblog/utils/errno"
 
 	"gorm.io/gorm"
@@ -26,7 +27,13 @@ func CheckUser(name string) error {
 
 // 新增用户
 func CreateUser(user *User) error {
-	err := db.Create(user).Error
+	enPw, err := encrypt.EncryptPw(user.Password)
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	user.Password = enPw
+
+	err = db.Create(user).Error
 	if err != nil {
 		return errno.New(errno.ERROR, err)
 	}
