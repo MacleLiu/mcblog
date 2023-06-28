@@ -1,6 +1,7 @@
 package modles
 
 import (
+	"fmt"
 	"mcblog/utils/encrypt"
 	"mcblog/utils/errno"
 
@@ -14,8 +15,8 @@ type User struct {
 	Role     int    `gorm:"type:int" json:"role" validate:"required,gte=2" label:"角色码"`
 }
 
-// 查询用户是否存在
-func CheckUser(name string) error {
+// 检查用户名是否存在
+func CheckUserName(name string) error {
 	var user User
 	db.Select("id").Where("username=?", name).First(&user)
 
@@ -50,4 +51,28 @@ func GetUsers(pageSize, pageNum int) ([]User, error) {
 	return users, nil
 }
 
-//编辑用户
+// 编辑用户信息
+func EditUser(id int, data User) error {
+	var user User
+	dataMap := make(map[string]any)
+	dataMap["username"] = data.Username
+	dataMap["role"] = data.Role
+
+	fmt.Println("dataMap: ", dataMap)
+
+	err = db.Model(&user).Where("id = ?", id).Updates(dataMap).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return nil
+}
+
+// 删除用户
+func DeleteUser(id int) error {
+	var user User
+	err := db.Where("id = ?", id).Delete(&user).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return nil
+}

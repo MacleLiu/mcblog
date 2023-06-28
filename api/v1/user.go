@@ -26,6 +26,7 @@ func AddUser(ctx *gin.Context) {
 		return
 	}
 
+	//字段合法性校验
 	if msg, err := validator.Validator(&user); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
@@ -35,7 +36,7 @@ func AddUser(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.CheckUser(user.Username)
+	err := modles.CheckUserName(user.Username)
 	if err == nil {
 		err = modles.CreateUser(&user)
 	}
@@ -75,10 +76,52 @@ func GetUsers(ctx *gin.Context) {
 
 // 编辑用户
 func EditUser(ctx *gin.Context) {
+	var user modles.User
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": errno.ERROR,
+			"msg":    err.Error(),
+		})
+		return
+	}
+
+	//字段合法性校验
+	if msg, err := validator.VarValidator(user.Username, "required,min=4,max=12"); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    "用户名" + msg,
+		})
+		return
+	}
+	if msg, err := validator.VarValidator(user.Role, "required,gte=2"); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    "角色码" + msg,
+		})
+		return
+	}
+
+	//检查用户名是否已存在
+	err := modles.CheckUserName(user.Username)
+	if err == nil {
+		err = modles.EditUser(id, user)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
 
 }
 
 // 删除用户
 func DeleteUser(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	err := modles.DeleteUser(id)
 
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
 }

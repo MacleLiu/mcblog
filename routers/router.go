@@ -24,7 +24,13 @@ func RouterInit(r *gin.Engine) {
 		}
 
 		//分类模块路由组
-
+		cate := router_v1.Group("/cate")
+		{
+			cate.POST("/add", v1.AddCategory)
+			cate.GET("/cates", v1.GetCategories)
+			cate.PUT("/:id", v1.EditCategory)
+			cate.DELETE("/:id", v1.DeleteCategory)
+		}
 		//文章模块路由组
 	}
 }

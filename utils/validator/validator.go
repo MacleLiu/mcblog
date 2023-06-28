@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"fmt"
 	"mcblog/utils/errno"
 	"reflect"
 
@@ -33,6 +34,27 @@ func Validator(data interface{}) (string, error) {
 	if err != nil {
 		// err 类型断言成功，确实为 ValidationErrors 将值赋给 v
 		for _, v := range err.(validator.ValidationErrors) {
+			return v.Translate(trans), errno.New(errno.ERROR, err)
+		}
+	}
+	return "", nil
+}
+
+// 验证单一变量
+func VarValidator(data interface{}, tag string) (string, error) {
+	validate := validator.New()                 // 实例化验证器
+	uni := ut.New(zh_Hans_CN.New())             // 设置成中文翻译器
+	trans, _ := uni.GetTranslator("zh_Hans_CN") //获取翻译词典
+
+	// 注册翻译器
+	_ = zhs.RegisterDefaultTranslations(validate, trans)
+
+	//验证器验证
+	err := validate.Var(data, tag)
+	if err != nil {
+		// err 类型断言成功，确实为 ValidationErrors 将值赋给 v
+		for _, v := range err.(validator.ValidationErrors) {
+			fmt.Println(v.Translate(trans))
 			return v.Translate(trans), errno.New(errno.ERROR, err)
 		}
 	}

@@ -1,11 +1,98 @@
 package v1
 
-//查询分类是否存在
+import (
+	"mcblog/modles"
+	"mcblog/utils/errno"
+	"net/http"
+	"strconv"
 
-//添加分类
+	"github.com/gin-gonic/gin"
+)
 
-//查询分类列表
+// 查询分类是否存在
+func CategoryExist(ctx *gin.Context) {
 
-//编辑分类
+}
 
-//删除分类
+// 添加分类
+func AddCategory(ctx *gin.Context) {
+	var cate modles.Category
+	if err := ctx.ShouldBindJSON(&cate); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": errno.ERROR,
+			"msg":    err.Error(),
+		})
+		return
+	}
+
+	err := modles.CheckCategory(cate.Name)
+	if err == nil {
+		err = modles.CreateCategory(&cate)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
+}
+
+// 查询分类列表
+func GetCategories(ctx *gin.Context) {
+	pageSize, _ := strconv.Atoi(ctx.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(ctx.Query("pagenum"))
+
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+
+	cates, err := modles.GetCategories(pageSize, pageNum)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   cates,
+		"msg":    errno.GetMsg(err),
+	})
+}
+
+// 编辑分类
+func EditCategory(ctx *gin.Context) {
+	var cate modles.Category
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	if err := ctx.ShouldBindJSON(&cate); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": errno.ERROR,
+			"msg":    err.Error(),
+		})
+		return
+	}
+
+	//检查分类是否已存在
+	err := modles.CheckCategory(cate.Name)
+	if err == nil {
+		err = modles.EditCategory(id, cate)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
+
+}
+
+// 删除分类
+func DeleteCategory(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	err := modles.DeleteCategory(id)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
+}

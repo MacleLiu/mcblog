@@ -13,7 +13,7 @@ const (
 	ERROR_TOKEN_WRONG        = 1006
 	ERROR_TOKEN_FORMAT_WRONG = 1007
 	//code=2000... 文章模块错误
-
+	ERROR_CATENAME_USED = 2001
 	//code=3000... 分类模块错误
 
 )
@@ -29,4 +29,6 @@ var codemsg = map[int]string{
 	ERROR_TOKEN_TIMEOUT:      "TOKEN已过期",
 	ERROR_TOKEN_WRONG:        "TOKEN错误",
 	ERROR_TOKEN_FORMAT_WRONG: "TOKEN格式错误",
+
+	ERROR_CATENAME_USED: "该分类已存在",
 }
