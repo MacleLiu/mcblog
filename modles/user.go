@@ -1,10 +1,11 @@
 package modles
 
 import (
-	"fmt"
+	"errors"
 	"mcblog/utils/encrypt"
 	"mcblog/utils/errno"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -15,15 +16,49 @@ type User struct {
 	Role     int    `gorm:"type:int" json:"role" validate:"required,gte=2" label:"角色码"`
 }
 
-// 检查用户名是否存在
+// 检查用户是否存在
+func CheckUser(id int) error {
+	var user User
+	err := db.Select("username").Where("id = ?", id).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_USER_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	return nil
+}
+
+// 检查用户名是否已使用
 func CheckUserName(name string) error {
 	var user User
-	db.Select("id").Where("username=?", name).First(&user)
-
-	if user.ID > 0 {
-		return errno.New(errno.ERROR_USERNAME_USED, err)
+	err := db.Select("id").Where("username=?", name).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_USER_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
 	}
-	return nil
+	if user.ID > 0 {
+		return nil
+	}
+	return errno.New(errno.ERROR, err)
+}
+
+func CheckUpUser(id int, name string) error {
+	var user User
+	err := db.Select("id").Where("username=?", name).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_USER_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
+	if user.ID == uint(id) {
+		return nil
+	}
+	return errno.New(errno.ERROR_USERNAME_USED, err)
 }
 
 // 新增用户
@@ -58,8 +93,6 @@ func EditUser(id int, data User) error {
 	dataMap["username"] = data.Username
 	dataMap["role"] = data.Role
 
-	fmt.Println("dataMap: ", dataMap)
-
 	err = db.Model(&user).Where("id = ?", id).Updates(dataMap).Error
 	if err != nil {
 		return errno.New(errno.ERROR, err)
@@ -74,5 +107,30 @@ func DeleteUser(id int) error {
 	if err != nil {
 		return errno.New(errno.ERROR, err)
 	}
+	return nil
+}
+
+// 登陆验证
+func LoginVerify(username, password string) error {
+	var user User
+	err := db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_USER_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	// 未做精细化权限管理，暂时禁止非管理员用户登录
+	if user.Role >= 2 {
+		return errno.New(errno.ERROR_AUTH_DEFICIENT, err)
+	}
+
+	// 比对密码
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return errno.New(errno.ERROR_PASSWORD_WRONG, err)
+	}
+
 	return nil
 }

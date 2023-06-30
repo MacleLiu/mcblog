@@ -1,3 +1,5 @@
+jwtSecret = "myJWTSecret"
+
 [server]
 # "debug"开发模式；"release"生成模式
 app_model = "debug"

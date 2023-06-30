@@ -1,8 +1,9 @@
 package config
 
 type Config struct {
-	Server Server      `toml:"server"`
-	Mysql  MysqlConfig `toml:"database"`
+	Server    Server      `toml:"server"`
+	Mysql     MysqlConfig `toml:"database"`
+	JwtSecret string      `toml:"jwtSecret"`
 }
 
 type Server struct {

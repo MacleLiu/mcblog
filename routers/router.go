@@ -2,35 +2,43 @@ package routers
 
 import (
 	v1 "mcblog/api/v1"
+	"mcblog/middlewares"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func RouterInit(r *gin.Engine) {
-	router_v1 := r.Group("/api/v1")
+	// 需要鉴权的资源
+	auth := r.Group("/api/v1")
+	auth.Use(middlewares.JWTAuth())
 	{
-		router_v1.GET("/", func(ctx *gin.Context) {
+		auth.GET("/users", v1.GetUsers)        // 获取用户列表
+		auth.PUT("user/:id", v1.EditUser)      // 修改用户信息
+		auth.DELETE("user/:id", v1.DeleteUser) // 删除用户
+
+		auth.POST("category/add", v1.AddCategory)      // 新增分类
+		auth.PUT("category/:id", v1.EditCategory)      // 修改分类信息
+		auth.DELETE("category/:id", v1.DeleteCategory) // 删除分类
+
+		auth.POST("article/add", v1.AddArticle)      //新增文章
+		auth.PUT("article/:id", v1.EditArticle)      //修改文章
+		auth.DELETE("article/:id", v1.DeleteArticle) //删除文章
+	}
+
+	//公共资源
+	router := r.Group("/api/v1")
+	{
+		router.GET("/", func(ctx *gin.Context) {
 			ctx.String(http.StatusOK, "API V1")
 		})
+		router.POST("login", v1.Login)      // 用户登录
+		router.POST("user/add", v1.AddUser) //用户注册
 
-		//用户模块路由组
-		user := router_v1.Group("/user")
-		{
-			user.POST("/add", v1.AddUser)
-			user.GET("/users", v1.GetUsers)
-			user.PUT("/:id", v1.EditUser)
-			user.DELETE("/:id", v1.DeleteUser)
-		}
+		router.GET("/categories", v1.GetCategories) //获取分类列表
 
-		//分类模块路由组
-		cate := router_v1.Group("/cate")
-		{
-			cate.POST("/add", v1.AddCategory)
-			cate.GET("/cates", v1.GetCategories)
-			cate.PUT("/:id", v1.EditCategory)
-			cate.DELETE("/:id", v1.DeleteCategory)
-		}
-		//文章模块路由组
+		router.GET("/articles", v1.GetArticles)            //获取文章列表
+		router.GET("article/:id", v1.GetArticle)           //获取指定文章
+		router.GET("article/cate/:id", v1.GetCateArticles) //获取一个分类下的文章
 	}
 }

@@ -36,9 +36,12 @@ func AddUser(ctx *gin.Context) {
 		return
 	}
 
+	//检查用户名是否已使用
 	err := modles.CheckUserName(user.Username)
-	if err == nil {
+	if errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
 		err = modles.CreateUser(&user)
+	} else if err == nil {
+		err = errno.New(errno.ERROR_USERNAME_USED, err)
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -102,11 +105,27 @@ func EditUser(ctx *gin.Context) {
 		return
 	}
 
-	//检查用户名是否已存在
-	err := modles.CheckUserName(user.Username)
-	if err == nil {
+	//检查目标用户是否存在
+	if err := modles.CheckUser(id); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    errno.GetMsg(err),
+		})
+
+		return
+	}
+
+	//检查更新用户
+	err := modles.CheckUpUser(id, user.Username)
+	if err == nil || errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
 		err = modles.EditUser(id, user)
 	}
+
+	/* if err == nil {
+		err = errno.New(errno.ERROR_USERNAME_USED, err)
+	} else if errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
+		err = modles.EditUser(id, user)
+	} */
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -118,6 +137,17 @@ func EditUser(ctx *gin.Context) {
 // 删除用户
 func DeleteUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	//检查目标用户是否存在
+	if err := modles.CheckUser(id); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    errno.GetMsg(err),
+		})
+
+		return
+	}
+
 	err := modles.DeleteUser(id)
 
 	ctx.JSON(http.StatusOK, gin.H{

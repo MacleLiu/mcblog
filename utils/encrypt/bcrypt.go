@@ -1,7 +1,6 @@
 package encrypt
 
 import (
-	"encoding/base64"
 	"mcblog/utils/errno"
 
 	"golang.org/x/crypto/bcrypt"
@@ -12,5 +11,5 @@ func EncryptPw(pw string) (string, error) {
 	if err != nil {
 		return "", errno.New(errno.ERROR, err)
 	}
-	return base64.RawStdEncoding.EncodeToString(bytes), err
+	return string(bytes), err
 }

@@ -25,8 +25,10 @@ func AddCategory(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.CheckCategory(cate.Name)
+	err := modles.CheckCategoryName(cate.Name)
 	if err == nil {
+		err = errno.New(errno.ERROR_CATE_USED, err)
+	} else if errno.GetCode(err) == errno.ERROR_CATE_NOT_EXIST {
 		err = modles.CreateCategory(&cate)
 	}
 
@@ -73,11 +75,17 @@ func EditCategory(ctx *gin.Context) {
 		return
 	}
 
-	//检查分类是否已存在
-	err := modles.CheckCategory(cate.Name)
-	if err == nil {
-		err = modles.EditCategory(id, cate)
+	// 检查目标分类是否存在
+	if err := modles.CheckCategory(id); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    errno.GetMsg(err),
+		})
+
+		return
 	}
+
+	err := modles.EditCategory(id, cate)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -89,6 +97,17 @@ func EditCategory(ctx *gin.Context) {
 // 删除分类
 func DeleteCategory(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	// 检查目标分类是否存在
+	if err := modles.CheckCategory(id); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    errno.GetMsg(err),
+		})
+
+		return
+	}
+
 	err := modles.DeleteCategory(id)
 
 	ctx.JSON(http.StatusOK, gin.H{

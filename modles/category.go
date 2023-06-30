@@ -1,7 +1,7 @@
 package modles
 
 import (
-	"fmt"
+	"errors"
 	"mcblog/utils/errno"
 
 	"gorm.io/gorm"
@@ -13,14 +13,34 @@ type Category struct {
 }
 
 // 检查分类是否存在
-func CheckCategory(name string) error {
+func CheckCategory(id int) error {
 	var cate Category
-	db.Select("id").Where("name=?", name).First(&cate)
+	err := db.Select("name").Where("id = ?", id).First(&cate).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_CATE_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	return nil
+}
+
+// 检查分类名是否已存在
+func CheckCategoryName(name string) error {
+	var cate Category
+	err := db.Select("id").Where("name=?", name).First(&cate).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_CATE_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
 
 	if cate.ID > 0 {
-		return errno.New(errno.ERROR_CATENAME_USED, err)
+		return nil
 	}
-	return nil
+	return errno.New(errno.ERROR, err)
 }
 
 // 新增分类
@@ -47,8 +67,6 @@ func EditCategory(id int, data Category) error {
 	var cate Category
 	dataMap := make(map[string]any)
 	dataMap["name"] = data.Name
-
-	fmt.Println("dataMap: ", dataMap)
 
 	err = db.Model(&cate).Where("id = ?", id).Updates(dataMap).Error
 	if err != nil {
