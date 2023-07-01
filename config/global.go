@@ -1,9 +1,10 @@
 package config
 
 type Config struct {
-	Server    Server      `toml:"server"`
-	Mysql     MysqlConfig `toml:"database"`
-	JwtSecret string      `toml:"jwtSecret"`
+	Server    Server `toml:"server"`
+	Mysql     Mysql  `toml:"database"`
+	JwtSecret string `toml:"jwtSecret"`
+	QiNiu     QiNiu  `toml:"qiniu"`
 }
 
 type Server struct {
@@ -11,12 +12,19 @@ type Server struct {
 	AppPort  string `toml:"app_port"`
 }
 
-type MysqlConfig struct {
+type Mysql struct {
 	Host     string `toml:"host"`
 	Port     string `toml:"port"`
 	User     string `toml:"user"`
 	Password string `toml:"password"`
 	DbName   string `toml:"db_name"`
+}
+
+type QiNiu struct {
+	AccessKey   string `toml:"access_key"`
+	SecretKey   string `toml:"secret_key"`
+	Bucket      string `toml:"bucket"`
+	QiNiuServer string `toml:"qiniu_server"`
 }
 
 var AppConfig Config

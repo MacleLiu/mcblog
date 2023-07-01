@@ -46,6 +46,7 @@ func CheckUserName(name string) error {
 	return errno.New(errno.ERROR, err)
 }
 
+// 检查新用户名是否被其他用户使用
 func CheckUpUser(id int, name string) error {
 	var user User
 	err := db.Select("id").Where("username=?", name).First(&user).Error

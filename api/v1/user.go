@@ -105,7 +105,7 @@ func EditUser(ctx *gin.Context) {
 		return
 	}
 
-	//检查目标用户是否存在
+	// 检查目标用户是否存在
 	if err := modles.CheckUser(id); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
@@ -115,17 +115,11 @@ func EditUser(ctx *gin.Context) {
 		return
 	}
 
-	//检查更新用户
+	// 检查新用户名是否被其他用户使用
 	err := modles.CheckUpUser(id, user.Username)
 	if err == nil || errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
 		err = modles.EditUser(id, user)
 	}
-
-	/* if err == nil {
-		err = errno.New(errno.ERROR_USERNAME_USED, err)
-	} else if errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
-		err = modles.EditUser(id, user)
-	} */
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),

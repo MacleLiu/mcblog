@@ -24,6 +24,8 @@ func RouterInit(r *gin.Engine) {
 		auth.POST("article/add", v1.AddArticle)      //新增文章
 		auth.PUT("article/:id", v1.EditArticle)      //修改文章
 		auth.DELETE("article/:id", v1.DeleteArticle) //删除文章
+
+		auth.POST("upload", v1.UpLoad) // 上传文件
 	}
 
 	//公共资源

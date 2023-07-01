@@ -1,0 +1,1 @@
+time="2023-07-02T00:23:50+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DuraTime="0 ms" HostName=DESKTOP-RP0R8EA IP=172.28.96.1 Method=GET Path="/api/v1/users?pagesize=&pagenum=" Status=200

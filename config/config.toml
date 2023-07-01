@@ -11,3 +11,9 @@ port = "3306"
 user = "mcblog"
 password = "123456"
 db_name = "mcblog"
+
+[qiniu]
+access_key = "FQVAgztMfryIsmRoJ9qpwHKUny-o88v1KQE6yzUB"
+secret_key = "2oY9gzWSx_aBCUZxEK-3KRPxOJcmOVxxlw9aO0DC"
+bucket = "macleblog"
+qiniu_server = "http://rx46effzx.hn-bkt.clouddn.com/"

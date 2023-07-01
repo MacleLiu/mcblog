@@ -2,6 +2,7 @@ package main
 
 import (
 	"mcblog/config"
+	"mcblog/middlewares"
 	"mcblog/modles"
 	"mcblog/routers"
 
@@ -19,7 +20,9 @@ func main() {
 
 	gin.SetMode(config.AppConfig.Server.AppModel)
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(middlewares.Logger())
+	r.Use(gin.Recovery())
 
 	routers.RouterInit(r)
 

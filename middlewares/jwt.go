@@ -91,19 +91,6 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 
-		/*
-			// 判端 token 是否过期
-			if time.Now().Unix() > claims.ExpiresAt {
-				err = errno.New(errno.ERROR_TOKEN_TIMEOUT, err)
-				ctx.JSON(http.StatusOK, gin.H{
-					"satatus": errno.GetCode(err),
-					"msg":     errno.GetMsg(err),
-				})
-				ctx.Abort()
-				return
-			}
-		*/
-
 		ctx.Next()
 	}
 }
