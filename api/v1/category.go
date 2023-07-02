@@ -54,11 +54,12 @@ func GetCategories(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	cates, err := modles.GetCategories(pageSize, pageNum)
+	cates, total, err := modles.GetCategories(pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   cates,
+		"total":  total,
 		"msg":    errno.GetMsg(err),
 	})
 }

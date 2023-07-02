@@ -16,20 +16,19 @@ func Logger() gin.HandlerFunc {
 	filePath := "log/mclog"
 	// 软链接路径，链接到最新的日志文件
 	linkName := "mclog.log"
-	logFile, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		fmt.Println("err: ", err)
-	}
-	logger := logrus.New()
 
-	logger.Out = logFile
+	logger := logrus.New()
 
 	logger.SetLevel(logrus.DebugLevel)
 
 	logWriter, _ := rotatelogs.New(
+		// 格式化日志文件名
 		filePath+".%Y%m%d.log",
+		// 日志最长保留时间
 		rotatelogs.WithMaxAge(7*24*time.Hour),
+		// 日志分隔间隔时间
 		rotatelogs.WithRotationTime(24*time.Hour),
+		// 为最新的日志建立软连接
 		rotatelogs.WithLinkName(linkName),
 	)
 

@@ -68,11 +68,12 @@ func GetUsers(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	users, err := modles.GetUsers(pageSize, pageNum)
+	users, total, err := modles.GetUsers(pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   users,
+		"total":  total,
 		"msg":    errno.GetMsg(err),
 	})
 }

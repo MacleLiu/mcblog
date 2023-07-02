@@ -78,13 +78,14 @@ func CreateUser(user *User) error {
 }
 
 // 查询用户列表
-func GetUsers(pageSize, pageNum int) ([]User, error) {
+func GetUsers(pageSize, pageNum int) ([]User, int64, error) {
 	var users []User
-	err := db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+	var total int64
+	err := db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errno.New(errno.ERROR, err)
+		return nil, 0, errno.New(errno.ERROR, err)
 	}
-	return users, nil
+	return users, total, nil
 }
 
 // 编辑用户信息

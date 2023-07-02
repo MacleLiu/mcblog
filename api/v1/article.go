@@ -56,11 +56,12 @@ func GetArticles(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	arts, err := modles.GetArticles(pageSize, pageNum)
+	arts, total, err := modles.GetArticles(pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   arts,
+		"total":  total,
 		"msg":    errno.GetMsg(err),
 	})
 }
@@ -82,11 +83,12 @@ func GetCateArticles(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	arts, err := modles.GetCateArticles(cid, pageSize, pageNum)
+	arts, total, err := modles.GetCateArticles(cid, pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   arts,
+		"total":  total,
 		"msg":    errno.GetMsg(err),
 	})
 }

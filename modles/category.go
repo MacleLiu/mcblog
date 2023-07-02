@@ -53,13 +53,14 @@ func CreateCategory(cate *Category) error {
 }
 
 // 查询分类列表
-func GetCategories(pageSize, pageNum int) ([]Category, error) {
+func GetCategories(pageSize, pageNum int) ([]Category, int64, error) {
 	var cates []Category
-	err := db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cates).Error
+	var total int64
+	err := db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cates).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errno.New(errno.ERROR, err)
+		return nil, 0, errno.New(errno.ERROR, err)
 	}
-	return cates, nil
+	return cates, total, nil
 }
 
 // 编辑分类信息

@@ -21,7 +21,7 @@ func main() {
 	gin.SetMode(config.AppConfig.Server.AppModel)
 
 	r := gin.New()
-	r.Use(middlewares.Logger())
+	r.Use(middlewares.Logger(), middlewares.Cors())
 	r.Use(gin.Recovery())
 
 	routers.RouterInit(r)
