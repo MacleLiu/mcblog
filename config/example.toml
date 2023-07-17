@@ -1,0 +1,22 @@
+# JWT 密钥
+jwtSecret = ""
+
+[server]
+# "debug"开发模式；"release"生成模式
+app_model = "debug"
+app_port = ":8888"
+
+# Mysql数据库配置
+[database]
+host = ""
+port = ""
+user = ""
+password = ""
+db_name = ""
+
+# 七牛云对象存储配置
+[qiniu]
+access_key = ""
+secret_key = ""
+bucket = ""
+qiniu_server = ""
