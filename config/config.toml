@@ -1,4 +1,4 @@
-jwtSecret = "myJWTSecret"
+jwtSecret = ""
 
 [server]
 # "debug"开发模式；"release"生成模式
@@ -6,14 +6,14 @@ app_model = "debug"
 app_port = ":8888"
 
 [database]
-host = "172.28.96.1"
-port = "3306"
-user = "mcblog"
-password = "123456"
-db_name = "mcblog"
+host = ""
+port = ""
+user = ""
+password = ""
+db_name = ""
 
 [qiniu]
-access_key = "2ocAmqRiymamYtbZodP3LJ6XVUO5zqXwymZ6f-fn"
-secret_key = "tztWUVS_Pkkz4HWqVvK6n5bShMWJTGChp5fZS2H6"
+access_key = "FQVAgztMfryIsmRoJ9qpwHKUny-o88v1KQE6yzUB"
+secret_key = "2oY9gzWSx_aBCUZxEK-3KRPxOJcmOVxxlw9aO0DC"
 bucket = "macleblog"
-qiniu_server = "http://rx6f35vbs.hn-bkt.clouddn.com/"
+qiniu_server = "http://rx46effzx.hn-bkt.clouddn.com/"
