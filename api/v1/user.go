@@ -50,12 +50,23 @@ func AddUser(ctx *gin.Context) {
 	})
 }
 
-//查询单个用户
+// 查询单个用户
+func GetUser(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	user, err := modles.GetUser(id)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   user,
+		"msg":    errno.GetMsg(err),
+	})
+}
 
 // 查询用户列表
 func GetUsers(ctx *gin.Context) {
 	pageSize, _ := strconv.Atoi(ctx.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(ctx.Query("pagenum"))
+	username := ctx.Query("username")
 
 	switch {
 	case pageSize >= 100:
@@ -68,7 +79,7 @@ func GetUsers(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	users, total, err := modles.GetUsers(pageSize, pageNum)
+	users, total, err := modles.GetUsers(pageSize, pageNum, username)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -98,7 +109,7 @@ func EditUser(ctx *gin.Context) {
 		})
 		return
 	}
-	if msg, err := validator.VarValidator(user.Role, "required,gte=2"); err != nil {
+	if msg, err := validator.VarValidator(user.Role, "required,oneof=1 2"); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
 			"msg":    "角色码" + msg,

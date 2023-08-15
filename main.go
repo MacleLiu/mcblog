@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"mcblog/config"
 	"mcblog/middlewares"
 	"mcblog/modles"
@@ -28,6 +29,7 @@ func main() {
 
 	//fmt.Println(config.AppConfig)
 
+	fmt.Println("服务启动完成")
 	r.Run(config.AppConfig.Server.AppPort)
 
 }

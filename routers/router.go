@@ -14,7 +14,9 @@ func RouterInit(r *gin.Engine) {
 	auth.Use(middlewares.JWTAuth())
 	{
 		auth.GET("/users", v1.GetUsers)        // 获取用户列表
+		auth.GET("/user/:id", v1.GetUser)      // 查询用户信息
 		auth.PUT("user/:id", v1.EditUser)      // 修改用户信息
+		auth.POST("user/add", v1.AddUser)      //添加注册
 		auth.DELETE("user/:id", v1.DeleteUser) // 删除用户
 
 		auth.POST("category/add", v1.AddCategory)      // 新增分类
@@ -34,8 +36,7 @@ func RouterInit(r *gin.Engine) {
 		router.GET("/", func(ctx *gin.Context) {
 			ctx.String(http.StatusOK, "API V1")
 		})
-		router.POST("login", v1.Login)      // 用户登录
-		router.POST("user/add", v1.AddUser) //用户注册
+		router.POST("login", v1.Login) // 用户登录
 
 		router.GET("/categories", v1.GetCategories) //获取分类列表
 

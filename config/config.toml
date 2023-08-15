@@ -6,11 +6,11 @@ app_model = "debug"
 app_port = ":8888"
 
 [database]
-host = ""
-port = ""
-user = ""
-password = ""
-db_name = ""
+host = "172.28.96.1"
+port = "3306"
+user = "mcblog"
+password = "123456"
+db_name = "mcblog"
 
 [qiniu]
 access_key = "FQVAgztMfryIsmRoJ9qpwHKUny-o88v1KQE6yzUB"
