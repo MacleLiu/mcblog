@@ -8,7 +8,7 @@
                         v-model="queryParam.username" 
                         placeholder="输入用户名查找" 
                         enter-button 
-                        @search="getUserByName"
+                        @search="getUserList"
                         allowClear 
                     /></a-col>
                 <a-col :span="4">
@@ -50,7 +50,7 @@
                     <a-input-password v-model="newUser.checkpassword"></a-input-password>
                 </a-form-model-item>
                 <a-form-model-item label="是否为管理员">
-                    <a-select :defaultValue="2" @change="isAdmin">
+                    <a-select v-model="newUser.role" :defaultValue="2" @change="isAdmin">
                         <a-select-option :value="1">是</a-select-option>
                         <a-select-option :value="2">否</a-select-option>
                     </a-select>
@@ -70,7 +70,7 @@
                     <a-input v-model="userInfo.username"></a-input>
                 </a-form-model-item>
                 <a-form-model-item label="是否为管理员">
-                    <a-select :defaultValue="userInfo.role" @change="isAdmin">
+                    <a-select v-model="userInfo.role" :defaultValue="userInfo.role" @change="editAdmin">
                         <a-select-option :value="1">是</a-select-option>
                         <a-select-option :value="2">否</a-select-option>
                     </a-select>
@@ -216,29 +216,11 @@
                     params: {
                         pagesize: this.queryParam.pagesize,
                         pagenum: this.queryParam.pagenum,
-                    },
-                })
-                if (res.status != 200) return this.$message.error(res.msg)
-                this.userlist = res.data
-                this.pagination.total = res.total
-            },
-            // 根据用户名模糊查询用户
-            async getUserByName() {
-                if(this.queryParam.username == ''){
-                    // this.queryParam.pagesize = 5
-                    this.queryParam.pagenum = 1
-                    this.pagination.current = 1
-                    // this.pagination.pageSize = 5
-                    this.getUserList()
-                    return
-                }
-                const { data : res } = await this.$http.get('users', {
-                    params: {
                         username: this.queryParam.username,
                     },
                 })
                 if (res.status != 200) return this.$message.error(res.msg)
-                this.userlist = res.data 
+                this.userlist = res.data
                 this.pagination.total = res.total
             },
             // 删除用户
@@ -291,6 +273,9 @@
                 this.userInfo.username = res.data.username
                 this.userInfo.role = res.data.role
                 this.userInfo.id = id
+            },
+            editAdmin(value) {
+                this.userInfo.role = value
             },
             editUserOk() {
                 this.$refs.editUserRef.validate(async valid => {

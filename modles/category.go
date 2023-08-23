@@ -52,11 +52,21 @@ func CreateCategory(cate *Category) error {
 	return nil
 }
 
+// 查询单个分类信息
+func GetCategory(id int) (Category, error) {
+	var cate Category
+	err := db.Where("id = ?", id).First(&cate).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return cate, errno.New(errno.ERROR, err)
+	}
+	return cate, nil
+}
+
 // 查询分类列表
 func GetCategories(pageSize, pageNum int) ([]Category, int64, error) {
 	var cates []Category
 	var total int64
-	err := db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cates).Count(&total).Error
+	err := db.Find(&cates).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}

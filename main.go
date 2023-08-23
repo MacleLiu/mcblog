@@ -17,8 +17,9 @@ type Config struct {
 
 func main() {
 	//初始化数据库
+	fmt.Println("数据库初始化")
 	modles.InitDb()
-
+	fmt.Println("数据库初始化完成")
 	gin.SetMode(config.AppConfig.Server.AppModel)
 
 	r := gin.New()

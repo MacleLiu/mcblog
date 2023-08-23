@@ -10,7 +10,7 @@
         </a-layout-header>
 
         <a-layout-content>
-          <router-view></router-view>
+          <router-view :key="$route.path"></router-view>
         </a-layout-content>
 
         <a-layout-footer class="footer">
@@ -40,7 +40,7 @@
     justify-content: flex-end;
     align-items: center;
   }
-  .footer{
+  .footer {
     text-align: center;
     background-color: #eee;
     font-size: 20px;

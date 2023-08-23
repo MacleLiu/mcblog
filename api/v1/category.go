@@ -38,6 +38,18 @@ func AddCategory(ctx *gin.Context) {
 	})
 }
 
+// 查询单个分类信息
+func GetCategory(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	cate, err := modles.GetCategory(id)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   cate,
+		"msg":    errno.GetMsg(err),
+	})
+}
+
 // 查询分类列表
 func GetCategories(ctx *gin.Context) {
 	pageSize, _ := strconv.Atoi(ctx.Query("pagesize"))

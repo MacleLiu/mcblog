@@ -13,7 +13,8 @@ import {
   Col,
   ConfigProvider,
   Modal,
-  Select
+  Select,
+  Upload
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -40,3 +41,4 @@ Vue.use(Col)
 Vue.use(ConfigProvider)
 Vue.use(Modal)
 Vue.use(Select)
+Vue.use(Upload)

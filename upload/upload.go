@@ -38,5 +38,5 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, error) {
 		return "", errno.New(errno.ERROR, err)
 	}
 
-	return config.AppConfig.QiNiu.QiNiuServer + ret.Key, nil
+	return config.AppConfig.QiNiu.QiNiuServer + "/" + ret.Key, nil
 }

@@ -39,6 +39,7 @@ func RouterInit(r *gin.Engine) {
 		router.POST("login", v1.Login) // 用户登录
 
 		router.GET("/categories", v1.GetCategories) //获取分类列表
+		auth.GET("/category/:id", v1.GetCategory)   // 查询分类信息
 
 		router.GET("/articles", v1.GetArticles)            //获取文章列表
 		router.GET("article/:id", v1.GetArticle)           //获取指定文章
