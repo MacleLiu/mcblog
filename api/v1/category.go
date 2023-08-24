@@ -76,6 +76,16 @@ func GetCategories(ctx *gin.Context) {
 	})
 }
 
+// 查询分类统计信息（分类下文章数量）
+func GetCateStat(ctx *gin.Context) {
+	cateStat, err := modles.GetCateStat()
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   cateStat,
+		"msg":    errno.GetMsg(err),
+	})
+}
+
 // 编辑分类
 func EditCategory(ctx *gin.Context) {
 	var cate modles.Category

@@ -9,7 +9,7 @@
 
         <a-col :xs="14" :sm="12" :md="14" :lg="8">
             <div class="inputContainer">
-                <a-input-search placeholder="搜索" style="width: auto; min-width: 0; flex: auto;" @search="onSearch" />
+                <a-input-search placeholder="搜索" style="max-width: 200px; width: auto; min-width: 0; flex: auto;" @search="onSearch" />
             </div>
         </a-col>
 

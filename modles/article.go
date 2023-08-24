@@ -14,7 +14,8 @@ type Article struct {
 	Cid      int      `gorm:"type:int;not null" json:"cid"`
 	Desc     string   `gorm:"type:varchar(200)" json:"desc"`
 	Content  string   `gorm:"type:longtext" json:"content"`
-	Img      string   `grom:"type:varchar(100)" json:"img"`
+	Img      string   `gorm:"type:varchar(100)" json:"img"`
+	Winnow   bool     `gorm:"type:bool;default:false" json:"winnow"`
 }
 
 // 检查文章是否存在

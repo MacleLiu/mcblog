@@ -128,7 +128,7 @@
                 this.pagination = pager
                 this.getArtList()
             },
-            // 获取分类
+            // 获取分类列表
             async getCateList() {
                 const { data : res } = await this.$http.get('categories')
                 if (res.status != 200) return this.$message.error(res.msg)

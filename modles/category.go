@@ -12,6 +12,11 @@ type Category struct {
 	Name string `gorm:"type:varchar(20);not null" json:"name"`
 }
 
+type CateStat struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
+
 // 检查分类是否存在
 func CheckCategory(id int) error {
 	var cate Category
@@ -71,6 +76,16 @@ func GetCategories(pageSize, pageNum int) ([]Category, int64, error) {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}
 	return cates, total, nil
+}
+
+// 查询分类统计信息（分类下文章数量）
+func GetCateStat() ([]CateStat, error) {
+	var cateStat []CateStat
+	err := db.Raw("SELECT c.name AS name, count(a.id) AS count From category c LEFT JOIN article a ON a.deleted_at IS NULL AND c.id = a.cid GROUP BY c.name").Scan(&cateStat).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, errno.New(errno.ERROR, err)
+	}
+	return cateStat, nil
 }
 
 // 编辑分类信息

@@ -29,10 +29,10 @@
                                 text-align: center;"
                         >
                             <a-col :span="8">
-                                <h3>99</h3>
+                                <h3>{{ pagination.total }}</h3>
                             </a-col>
                             <a-col :span="8">
-                                <h3>99</h3>
+                                <h3>{{ catetotal }}</h3>
                             </a-col>
                             <a-col :span="8">
                                 <h3>99</h3>
@@ -51,12 +51,17 @@
                             <span>Follow Me</span>
                         </a-button>
                         <div style="margin-top: 10px; 
-                                width: 60%; 
+                                width: 80%; 
                                 display: flex;
                                 justify-content: space-around;"
                         >
-                            <ali-icon style="font-size: 20px;" type="icon-GitHub" />
-                            <ali-icon style="font-size: 20px;" type="icon-bilibili" />
+                            <a href="https://github.com/MacleLiu" target="_blank" title="github">
+                                <ali-icon style="font-size: 20px;" type="icon-GitHub" />
+                            </a>
+                            <a href="https://space.bilibili.com/89687310" target="_blank" title="bilibili">
+                                <ali-icon style="font-size: 20px;" type="icon-bilibili" />
+                            </a>
+                            
                             <ali-icon style="font-size: 20px;" type="icon-weibo" />
                         </div>
                     </a-card>
@@ -70,17 +75,17 @@
                         
                         <!-- 列表 -->
                         <div style="width: 100%;">
-                        <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="data">
-                            <a-list-item slot="renderItem" slot-scope="item, index">
-                                <div style="width: 100%; font-size: 16px;">
+                        <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="artlist">
+                            <a-list-item slot="renderItem" slot-scope="item, index"  v-if="item.winnow">
+                                <div style="width: 100%; font-size: 15px; margin-bottom: 2px;">
                                     <a href="" >{{ item.title }}</a>
                                 </div>
                                 <div style="width: 100%;">
                                     <ali-icon type="icon-date1"/>
-                                    <span>2023-08-24</span>
+                                    <span>{{ item.CreatedAt | dateFormat }}</span>
                                     <span style="margin: 0 10px;">|</span>
                                     <ali-icon type="icon-folderopen"/>
-                                    <span>分类</span>
+                                    <span>{{ getCateByCid(item.cid) }}</span>
                                 </div>
                             </a-list-item>
                         </a-list>
@@ -97,12 +102,12 @@
 
                         <!-- 列表 -->
                         <div style="width: 100%;">
-                        <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="cate">
+                        <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="catestat">
                             <a-list-item slot="renderItem" slot-scope="item, index">
                                 <a href="" >
                                     <div style="width: 100%; font-size: 16px; display: flex; justify-content: space-between;">
                                         <span>{{ item.name }}</span>
-                                        <span>{{ item.total }}</span>
+                                        <span>{{ item.count }}</span>
                                     </div>
                                 </a>
                             </a-list-item>
@@ -147,7 +152,7 @@
             <!-- 文章列表区域 -->
             <a-col :xs="24" :sm="24" :md="18" :lg="18" :xl="12">
                 <a-space class="infoCol" direction="vertical" :size="size">
-                    <a-list item-layout="horizontal" :bordered="false" :split="false" :data-source="data">
+                    <a-list item-layout="horizontal" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
                         <a-list-item slot="renderItem" slot-scope="item, index">
                             <a-card :hoverable="true">
                                 <div style="width: 100%; font-size: 24px;">
@@ -155,10 +160,10 @@
                                 </div>
                                 <div style="width: 100%;">
                                     <ali-icon type="icon-date1"/>
-                                    <span>2023-08-24</span>
+                                    <span>{{ item.CreatedAt | dateFormat }}</span>
                                     <span style="margin: 0 10px;">|</span>
                                     <ali-icon type="icon-folderopen"/>
-                                    <span>分类</span>
+                                    <span>{{ getCateByCid(item.cid) }}</span>
                                 </div>
                                 <div style="width: 100%; margin-top: 10px; font-size: 16px;">
                                     <p>文章描述</p>
@@ -172,49 +177,74 @@
 </template>
 
 <script>
-const data = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
-
-const cate = [
-  {
-    name: '前端',
-    total: 99,
-  },
-  {
-    name: '后端',
-    total: 99,
-  },
-  {
-    name: '安全',
-    total: 99,
-  },
-  {
-    name: '随笔',
-    total: 99,
-  },
-];
-
 export default {
     data() {
         return {
-            data,
-            cate,
+            pagination: {
+                pageSizeOptions: ['5', '10', '20'],
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: false,
+                showTotal: (total) => `共${ total }条`,
+            },
+            queryParam: {
+                pagesize: 5,
+                pagenum: 1,
+                title: '',
+            },
+            artlist: [],
+            catelist: [],
+            catestat: [],
+            catetotal: 0,
             size: 'middle',
         }
     },
     methods: {
+        // 查询文章列表
+        async getArtList() {
+            const { data : res } = await this.$http.get('articles', {
+                params: {
+                    pagesize: this.queryParam.pagesize,
+                    pagenum: this.queryParam.pagenum,
+                    title: this.queryParam.title,
+                },
+            })
+            if (res.status != 200) return this.$message.error(res.msg)
+            this.artlist = res.data
+            this.pagination.total = res.total
+        },
+        // 获取分类列表
+        async getCateList() {
+            const { data : res } = await this.$http.get('categories')
+            if (res.status != 200) return this.$message.error(res.msg)
+            this.catelist = res.data
+            this.catetotal = res.total
+        },
+        // 获取分类统计
+        async getCateStat() {
+            const { data : res } = await this.$http.get('catestat')
+            if (res.status != 200) return this.$message.error(res.msg)
+            this.catestat = res.data
+        },
+        // 根据Cid获取分类名
+        getCateByCid(cid) {
+            console.log(cid)
+            let cate = this.catelist.filter(item => {
+                return item.id === cid
+            })
+            console.log(cate)
+            if (cate.length > 0){
+                return cate[0].name
+            } else {
+                return '其他'
+            }
+        }
+    },
+
+    created() {
+        this.getArtList()
+        this.getCateList()
+        this.getCateStat()
     },
   }
 </script>
