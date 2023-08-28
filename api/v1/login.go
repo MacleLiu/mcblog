@@ -2,7 +2,7 @@ package v1
 
 import (
 	"mcblog/middlewares"
-	"mcblog/modles"
+	"mcblog/models"
 	"mcblog/utils/errno"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 )
 
 func Login(ctx *gin.Context) {
-	var user modles.User
+	var user models.User
 	var token string
 	var err error
 	if err = ctx.ShouldBindJSON(&user); err != nil {
@@ -21,7 +21,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	if err = modles.LoginVerify(user.Username, user.Password); err == nil {
+	if err = models.LoginVerify(user.Username, user.Password); err == nil {
 		token, err = middlewares.GenerateToken(user.Username)
 	}
 

@@ -47,10 +47,10 @@
                 return <a-icon type="menu" />
             },
             toIndex() {
-                this.$router.push('/index').catch((err) => err )
+                this.$router.push('/').catch((err) => err )
             },
             goToPage(item) {
-                this.$router.push('/' + item.key).catch((err) => err )
+                this.$router.push('/blog/' + item.key).catch((err) => err )
             },
             onSearch() {},
         }
@@ -59,7 +59,7 @@
 
 <style scoped>
     .headerRow {
-        height: 6%;
+        height: 7%;
         flex: 0 0 auto;
         display: flex;
         padding: 0 40px;

@@ -12,6 +12,8 @@ import {
   Avatar,
   List,
   Tag,
+  Anchor,
+  Timeline,
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -42,3 +44,5 @@ Vue.use(Space)
 Vue.use(Avatar)
 Vue.use(List)
 Vue.use(Tag)
+Vue.use(Anchor)
+Vue.use(Timeline)

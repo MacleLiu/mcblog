@@ -19,6 +19,7 @@
     import './plugins/wordcount/plugin.min.js'
     import './plugins/image/plugin.min.js'
     import './plugins/link/plugin.min.js'
+    import './plugins/anchor/plugin.min.js'
 
 
     export default {
@@ -33,9 +34,10 @@
             return {
                 init: {
                     language: 'zh-Hans',
-                    plugins: 'preview code codesample wordcount image link unlink',
+                    height: 800,
+                    plugins: 'preview code codesample wordcount image link unlink anchor',
                     toolbar1: 'undo redo | styles bold italic | alignleft aligncenter alignright alignjustify | outdent indent | preview code',
-                    toolbar2: 'paste copy cut | codesample image | link unlink',
+                    toolbar2: 'paste copy cut | codesample image | link unlink anchor',
                     // 上传图片
                     images_upload_handler: (blobInfo, progress) => new Promise(async (resolve, reject) => {
                         let formData = new FormData()

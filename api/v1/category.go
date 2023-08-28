@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"mcblog/modles"
+	"mcblog/models"
 	"mcblog/utils/errno"
 	"net/http"
 	"strconv"
@@ -16,7 +16,7 @@ func CategoryExist(ctx *gin.Context) {
 
 // 添加分类
 func AddCategory(ctx *gin.Context) {
-	var cate modles.Category
+	var cate models.Category
 	if err := ctx.ShouldBindJSON(&cate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": errno.ERROR,
@@ -25,11 +25,11 @@ func AddCategory(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.CheckCategoryName(cate.Name)
+	err := models.CheckCategoryName(cate.Name)
 	if err == nil {
 		err = errno.New(errno.ERROR_CATE_USED, err)
 	} else if errno.GetCode(err) == errno.ERROR_CATE_NOT_EXIST {
-		err = modles.CreateCategory(&cate)
+		err = models.CreateCategory(&cate)
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -42,7 +42,7 @@ func AddCategory(ctx *gin.Context) {
 func GetCategory(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	cate, err := modles.GetCategory(id)
+	cate, err := models.GetCategory(id)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   cate,
@@ -66,7 +66,7 @@ func GetCategories(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	cates, total, err := modles.GetCategories(pageSize, pageNum)
+	cates, total, err := models.GetCategories(pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -78,7 +78,7 @@ func GetCategories(ctx *gin.Context) {
 
 // 查询分类统计信息（分类下文章数量）
 func GetCateStat(ctx *gin.Context) {
-	cateStat, err := modles.GetCateStat()
+	cateStat, err := models.GetCateStat()
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   cateStat,
@@ -88,7 +88,7 @@ func GetCateStat(ctx *gin.Context) {
 
 // 编辑分类
 func EditCategory(ctx *gin.Context) {
-	var cate modles.Category
+	var cate models.Category
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if err := ctx.ShouldBindJSON(&cate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -99,7 +99,7 @@ func EditCategory(ctx *gin.Context) {
 	}
 
 	// 检查目标分类是否存在
-	if err := modles.CheckCategory(id); err != nil {
+	if err := models.CheckCategory(id); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
 			"msg":    errno.GetMsg(err),
@@ -108,7 +108,7 @@ func EditCategory(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.EditCategory(id, cate)
+	err := models.EditCategory(id, cate)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -122,7 +122,7 @@ func DeleteCategory(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	// 检查目标分类是否存在
-	if err := modles.CheckCategory(id); err != nil {
+	if err := models.CheckCategory(id); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
 			"msg":    errno.GetMsg(err),
@@ -131,7 +131,7 @@ func DeleteCategory(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.DeleteCategory(id)
+	err := models.DeleteCategory(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),

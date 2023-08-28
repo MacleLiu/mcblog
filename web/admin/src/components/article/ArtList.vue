@@ -44,7 +44,6 @@
 </template>
 
 <script>
-
     const columns = [
         {
             title: 'ID',

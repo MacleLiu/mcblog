@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"mcblog/modles"
+	"mcblog/models"
 	"mcblog/utils/errno"
 	"mcblog/utils/validator"
 	"net/http"
@@ -17,7 +17,7 @@ func UserExist(ctx *gin.Context) {
 
 // 添加用户
 func AddUser(ctx *gin.Context) {
-	var user modles.User
+	var user models.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": errno.ERROR,
@@ -32,14 +32,13 @@ func AddUser(ctx *gin.Context) {
 			"status": errno.GetCode(err),
 			"msg":    msg,
 		})
-
 		return
 	}
 
 	//检查用户名是否已使用
-	err := modles.CheckUserName(user.Username)
+	err := models.CheckUserName(user.Username)
 	if errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
-		err = modles.CreateUser(&user)
+		err = models.CreateUser(&user)
 	} else if err == nil {
 		err = errno.New(errno.ERROR_USERNAME_USED, err)
 	}
@@ -54,7 +53,7 @@ func AddUser(ctx *gin.Context) {
 func GetUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	user, err := modles.GetUser(id)
+	user, err := models.GetUser(id)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   user,
@@ -79,7 +78,7 @@ func GetUsers(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	users, total, err := modles.GetUsers(pageSize, pageNum, username)
+	users, total, err := models.GetUsers(pageSize, pageNum, username)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -91,7 +90,7 @@ func GetUsers(ctx *gin.Context) {
 
 // 编辑用户
 func EditUser(ctx *gin.Context) {
-	var user modles.User
+	var user models.User
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -118,7 +117,7 @@ func EditUser(ctx *gin.Context) {
 	}
 
 	// 检查目标用户是否存在
-	if err := modles.CheckUser(id); err != nil {
+	if err := models.CheckUser(id); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
 			"msg":    errno.GetMsg(err),
@@ -128,9 +127,9 @@ func EditUser(ctx *gin.Context) {
 	}
 
 	// 检查新用户名是否被其他用户使用
-	err := modles.CheckUpUser(id, user.Username)
+	err := models.CheckUpUser(id, user.Username)
 	if err == nil || errno.GetCode(err) == errno.ERROR_USER_NOT_EXIST {
-		err = modles.EditUser(id, user)
+		err = models.EditUser(id, user)
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -145,7 +144,7 @@ func DeleteUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	//检查目标用户是否存在
-	if err := modles.CheckUser(id); err != nil {
+	if err := models.CheckUser(id); err != nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": errno.GetCode(err),
 			"msg":    errno.GetMsg(err),
@@ -154,7 +153,7 @@ func DeleteUser(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.DeleteUser(id)
+	err := models.DeleteUser(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),

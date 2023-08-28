@@ -16,7 +16,7 @@ func RouterInit(r *gin.Engine) {
 		auth.GET("/users", v1.GetUsers)        // 获取用户列表
 		auth.GET("/user/:id", v1.GetUser)      // 查询用户信息
 		auth.PUT("user/:id", v1.EditUser)      // 修改用户信息
-		auth.POST("user/add", v1.AddUser)      //添加注册
+		auth.POST("user/add", v1.AddUser)      // 添加用户
 		auth.DELETE("user/:id", v1.DeleteUser) // 删除用户
 
 		auth.POST("category/add", v1.AddCategory)      // 新增分类
@@ -28,6 +28,8 @@ func RouterInit(r *gin.Engine) {
 		auth.DELETE("article/:id", v1.DeleteArticle) //删除文章
 
 		auth.POST("upload", v1.UpLoad) // 上传文件
+
+		auth.POST("tool/add", v1.AddTool) // 新增工具
 	}
 
 	//公共资源
@@ -39,11 +41,18 @@ func RouterInit(r *gin.Engine) {
 		router.POST("login", v1.Login) // 用户登录
 
 		router.GET("/categories", v1.GetCategories) //获取分类列表
-		router.GET("/catestat", v1.GetCateStat)     //获取分类列表
-		auth.GET("/category/:id", v1.GetCategory)   // 查询分类信息
+		router.GET("/catestat", v1.GetCateStat)     //获取分类统计
+		router.GET("/category/:id", v1.GetCategory) // 查询分类信息
 
+		router.GET("/articlecount", v1.GetArticleCount)    //获取文章总数
 		router.GET("/articles", v1.GetArticles)            //获取文章列表
+		router.GET("/winnow", v1.GetWinnowArticles)        //获取精选文章列表
+		router.GET("/allartinfo", v1.GetAllArtInfo)        //获取全部文章的基础信息
 		router.GET("article/:id", v1.GetArticle)           //获取指定文章
 		router.GET("article/cate/:id", v1.GetCateArticles) //获取一个分类下的文章
+
+		router.GET("/tools", v1.GetTools) //获取工具列表
+
+		router.GET("/wishes", v1.GetWishes) //获取心愿列表
 	}
 }

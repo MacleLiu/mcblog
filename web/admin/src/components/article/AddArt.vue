@@ -36,7 +36,7 @@
                     </a-upload>
                 </a-form-model-item>
                 <a-form-model-item label="文章内容" prop="content">
-                    <Editor style="width: 80%;" v-model="artInfo.content"></Editor>
+                    <Editor v-model="artInfo.content"></Editor>
                 </a-form-model-item>
                 <a-form-model-item>
                     <a-button type="primary" @click="submitInfo(artInfo.id)">{{ artInfo.id ? '更新' : '提交' }}</a-button>

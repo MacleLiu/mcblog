@@ -12,6 +12,13 @@ Vue.filter('dateFormat', (dt) => {
   return dayjs(dt).format('YYYY-MM-DD')
 })
 
+// 修改网页title的指令
+Vue.directive('title', {
+  inserted: function (el, binding) {
+    document.title = el.dataset.title
+  }
+})
+
 new Vue({
   router,
   render: h => h(App),
