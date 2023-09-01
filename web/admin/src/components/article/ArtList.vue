@@ -65,7 +65,8 @@
             width: '15%',
             key: 'title',
             align: 'center',
-        },{
+        },
+        {
             title: '文章描述',
             dataIndex: 'desc',
             width: '20%',

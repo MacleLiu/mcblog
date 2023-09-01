@@ -1,15 +1,18 @@
 <template>
-    <div class="frontContainer" v-title data-title="首页">
-        <FrontHeader/>
-        <a-row class="indexRow">
-            <a-col class="introCol" :xs="24" :sm="24" :md="8" :lg="6" :xl="5">
-              <LeftIntro/>
-            </a-col>
-            <a-col class="infoCol" :xs="24" :sm="24" :md="16" :lg="18" :xl="13">
-              <ArticleList/>
-            </a-col>
-          </a-row>
-        <FrontFooter/>
+  <div class="frontContainer" v-title data-title="首页">
+      <FrontHeader/>
+      <a-row class="indexRow">
+          <a-col class="introCol" :xs="24" :sm="24" :md="8" :lg="6" :xl="5">
+            <LeftIntro/>
+          </a-col>
+          <a-col class="infoCol" :xs="24" :sm="24" :md="16" :lg="18" :xl="13">
+            <ArticleList/>
+          </a-col>
+        </a-row>
+      <FrontFooter/>
+      <div>
+        <a-back-top :visibilityHeight="600"/>
+      </div>
   </div>
 </template>
   
@@ -39,8 +42,8 @@ export default {
     margin: 40px 0;
 }
 .introCol {
-    display: flex;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex-direction: column; */
     padding: 0 10px;
 }
 .infoCol {

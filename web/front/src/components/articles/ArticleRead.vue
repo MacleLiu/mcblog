@@ -3,28 +3,30 @@
         <FrontHeader/>
         <a-row class="readRow">
             <a-col class="introCol" :xs="0" :sm="0" :md="6" :lg="6" :xl="4">
-                <a-space direction="vertical" :size="size">
-                    <!-- 摘要卡片 -->
-                    <a-card :hoverable="true">
-                        <div style="width: 100%; margin-bottom: 20px;">
-                            <h2 style="display: inline;">摘要</h2>
-                        </div>
-                            <!-- 目录 -->
-                        <div style="width: 100%;">
-                            <p>{{ artInfo.desc }}</p>
-                        </div>
-                    </a-card>
-                    <!-- 目录卡片 -->
-                    <a-card :hoverable="true">
-                        <div style="width: 100%; margin-bottom: 20px;">
-                            <h2 style="display: inline;">目录</h2>
-                        </div>
-                            <!-- 目录 -->
-                        <div style="width: 100%;">
-                            <p>开发中......</p>
-                        </div>
-                    </a-card>
-                </a-space>
+                <a-affix :offset-top="top">
+                    <a-space direction="vertical" :size="size">
+                        <!-- 摘要卡片 -->
+                        <a-card :hoverable="true">
+                            <div style="width: 100%; margin-bottom: 20px;">
+                                <h2 style="display: inline;">摘要</h2>
+                            </div>
+                                <!-- 目录 -->
+                            <div style="width: 100%;">
+                                <p>{{ artInfo.desc }}</p>
+                            </div>
+                        </a-card>
+                        <!-- 目录卡片 -->
+                        <a-card :hoverable="true">
+                            <div style="width: 100%; margin-bottom: 20px;">
+                                <h2 style="display: inline;">目录</h2>
+                            </div>
+                                <!-- 目录 -->
+                            <div style="width: 100%;">
+                                <p>开发中......</p>
+                            </div>
+                        </a-card>
+                    </a-space>
+                </a-affix>
             </a-col>
             
             <a-col class="infoCol" :xs="24" :sm="24" :md="18" :lg="18" :xl="12">
@@ -45,11 +47,21 @@
                         </div>
                         <!-- 文章内容 -->
                         <div v-html="artInfo.content" style="width: 100%; font-size: 16px;"></div>
+                        <hr style="width: 100%; border: 1px dashed skyblue;">
+                        <!-- 文章标签 -->
+                        <div style="width: 100%;">
+                            <a-tag v-for="item in taglist" color="blue">
+                                {{ item.name }}
+                            </a-tag>
+                        </div>
                     </a-card>
                 </a-space>
             </a-col>
         </a-row>
         <FrontFooter/>
+        <div>
+            <a-back-top :visibilityHeight="600"/>
+        </div>
     </div>
 </template>
 
@@ -75,7 +87,9 @@ export default {
                 content: '',
                 img: '',
             },
+            taglist: [],
             size: 'middle',
+            top: 10,
         }
     },
 
@@ -87,10 +101,17 @@ export default {
             this.artInfo = res.data
             this.artInfo.id = res.data.ID
         },
+        // 查询文章标签
+        async getArtTags(id) {
+            const { data : res } = await this.$http.get(`tags/${ id }`)
+            if (res.status != 200) return this.$message.error(res.msg)
+            this.taglist = res.data
+        },
     },
 
     created() {
         this.getArtInfo(this.id)
+        this.getArtTags(this.id)
     },
 }
 </script>

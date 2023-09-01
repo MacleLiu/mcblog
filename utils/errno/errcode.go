@@ -18,6 +18,9 @@ const (
 	//code=3000... 分类模块错误
 	ERROR_CATE_USED      = 3001
 	ERROR_CATE_NOT_EXIST = 3002
+	//code=4000... 标签模块错误
+	ERROR_TAG_USED      = 4001
+	ERROR_TAG_NOT_EXIST = 4002
 )
 
 var codemsg = map[int]string{
@@ -35,6 +38,9 @@ var codemsg = map[int]string{
 
 	ERROR_CATE_USED:      "该分类已存在",
 	ERROR_CATE_NOT_EXIST: "该分类不存在",
+
+	ERROR_TAG_USED:      "该标签已存在",
+	ERROR_TAG_NOT_EXIST: "该标签不存在",
 
 	ERROR_ARTICLE_NOT_EXIST: "文章不存在",
 }

@@ -16,6 +16,8 @@
             <a-menu-item key="categories"><a-icon type="book" /><span>分类列表</span></a-menu-item>
 
             <a-menu-item key="users"><a-icon type="user" /><span>用户列表</span></a-menu-item>
+            <a-menu-item key="tools"><a-icon type="tool" /><span>工具列表</span></a-menu-item>
+            <a-menu-item key="wishs"><a-icon type="heart" /><span>心愿列表</span></a-menu-item>
         </a-menu>
     </div>
 </template>

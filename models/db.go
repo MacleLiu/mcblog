@@ -34,7 +34,7 @@ func InitDb() {
 		os.Exit(1)
 	}
 
-	db.AutoMigrate(&User{}, &Article{}, &Category{}, &Tool{}, &Wish{})
+	db.AutoMigrate(&User{}, &Article{}, &Category{}, &Tool{}, &Wish{}, &Tag{}, &ArticleTag{})
 
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
 	sqlDB, err := db.DB()

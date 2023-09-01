@@ -14,7 +14,9 @@ import {
   ConfigProvider,
   Modal,
   Select,
-  Upload
+  Upload,
+  Switch,
+  Tag,
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -42,3 +44,5 @@ Vue.use(ConfigProvider)
 Vue.use(Modal)
 Vue.use(Select)
 Vue.use(Upload)
+Vue.use(Switch)
+Vue.use(Tag)

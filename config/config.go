@@ -3,7 +3,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/BurntSushi/toml"
 )
@@ -16,9 +15,9 @@ func InitializeConfig() {
 	//配置文件路径
 	configFile := "config/config.toml"
 	//支持通过环境变量修改配置文件路径
-	if configEnv := os.Getenv("VIPER_CONFIG"); configEnv != "" {
-		configFile = configEnv
-	}
+	// if configEnv := os.Getenv("VIPER_CONFIG"); configEnv != "" {
+	// 	configFile = configEnv
+	// }
 
 	/*
 		//初始化viper

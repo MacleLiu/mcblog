@@ -10,6 +10,9 @@
             </a-col>
         </a-row>
       <FrontFooter/>
+      <div>
+        <a-back-top :visibilityHeight="600"/>
+      </div>
 </div>
 </template>
 
@@ -39,7 +42,7 @@ export default {
 }
 .introCol {
     /* display: flex; */
-    flex-direction: column;
+    /* flex-direction: column; */
     padding: 0 10px;
 }
 .infoCol {

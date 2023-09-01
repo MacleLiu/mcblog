@@ -1,5 +1,10 @@
 <template>
     <a-space direction="vertical" :size="size"  v-title data-title="分类">
+        <div style="width: 100%;">
+            <ali-icon style="font-size: 20px; margin-right: 10px;" type="icon-FolderOpen-1" />
+            <h2 style="display: inline;">分类{{ artlist.length === 0 ? '' : ' - ' + artlist[0].Category.name }}</h2>
+            <hr style="width: 100%;" color="skyblue">
+        </div>
         <a-list item-layout="horizontal" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
             <a-list-item slot="renderItem" slot-scope="item, index">
                 <a-card :hoverable="true">
@@ -43,6 +48,7 @@ export default {
                 pagenum: 1,
             },
             artlist: [],
+            catename: '',
             size: 'middle',
         }
     },
@@ -56,6 +62,10 @@ export default {
                 },
             })
             if (res.status != 200) return this.$message.error(res.msg)
+            if (res.data.length === 0) {
+                this.$router.push(`/`).catch((err) => err )
+                return this.$message.warning("当前分类为空")
+            }
             this.artlist = res.data
             this.pagination.total = res.total
         },

@@ -107,13 +107,13 @@
                 CateRules: {
                     name: [
                         { required: true, message: '请输入分类名', trigger: 'change' },
-                        { max: 12, message: '分类名不超过20个字符', trigger: 'change' },
+                        { max: 20, message: '分类名不超过20个字符', trigger: 'change' },
                     ],
                 },
                 addCateRules: {
                     name: [
                         { required: true, message: '请输入分类名', trigger: 'change' },
-                        { max: 12, message: '分类名不超过20个字符', trigger: 'change' },
+                        { max: 20, message: '分类名不超过20个字符', trigger: 'change' },
                     ],
                 },
                 editCateVisible: false,

@@ -23,7 +23,7 @@ func main() {
 	gin.SetMode(config.AppConfig.Server.AppModel)
 
 	r := gin.New()
-	r.Use(middlewares.Logger(), middlewares.Cors())
+	r.Use(middlewares.Logger(), middlewares.Cors(), middlewares.TlsHandler())
 	r.Use(gin.Recovery())
 
 	routers.RouterInit(r)
@@ -31,6 +31,7 @@ func main() {
 	//fmt.Println(config.AppConfig)
 
 	fmt.Println("服务启动完成")
-	r.Run(config.AppConfig.Server.AppPort)
+	r.RunTLS(config.AppConfig.Server.AppPort, "cacert.pem", "privkey.pem")
+	// r.Run(config.AppConfig.Server.AppPort)
 
 }

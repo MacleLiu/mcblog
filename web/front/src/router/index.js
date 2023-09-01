@@ -12,6 +12,7 @@ import FrontAbout from '../components/about/FrontAbout'
 
 import ArticleRead from '../components/articles/ArticleRead'
 import CateList from '../components/articles/CateList'
+import TagList from '../components/articles/TagList'
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,7 @@ const routes = [
             {path: 'tool', component: FrontTool},
             {path: 'about', component: FrontAbout},
             {path: 'cate/:cid', component: CateList, props: true},
+            {path: 'tag/:tid', component: TagList, props: true},
         ]
     },
     {
@@ -40,6 +42,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 })
 

@@ -14,6 +14,8 @@ import {
   Tag,
   Anchor,
   Timeline,
+  BackTop,
+  Affix,
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -46,3 +48,5 @@ Vue.use(List)
 Vue.use(Tag)
 Vue.use(Anchor)
 Vue.use(Timeline)
+Vue.use(BackTop)
+Vue.use(Affix)

@@ -15,7 +15,7 @@ Vue.filter('dateFormat', (dt) => {
 // 修改网页title的指令
 Vue.directive('title', {
   inserted: function (el, binding) {
-    document.title = el.dataset.title
+    document.title = el.dataset.title + ' - Macle'
   }
 })
 

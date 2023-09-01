@@ -21,6 +21,16 @@ func CreateTool(tool *Tool) error {
 	return nil
 }
 
+// 查询单个分类信息
+func GetTool(id int) (Tool, error) {
+	var tool Tool
+	err := db.Where("id = ?", id).First(&tool).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return tool, errno.New(errno.ERROR, err)
+	}
+	return tool, nil
+}
+
 // 分页查询工具列表
 func GetTools(pageSize, pageNum int) ([]Tool, int64, error) {
 	var tools []Tool
@@ -30,4 +40,28 @@ func GetTools(pageSize, pageNum int) ([]Tool, int64, error) {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}
 	return tools, total, nil
+}
+
+// 编辑工具信息
+func EditTool(id int, data Tool) error {
+	var tool Tool
+	dataMap := make(map[string]any)
+	dataMap["name"] = data.Name
+	dataMap["url"] = data.Url
+
+	err = db.Model(&tool).Where("id = ?", id).Updates(dataMap).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return nil
+}
+
+// 删除工具
+func DeleteTool(id int) error {
+	var tool Tool
+	err := db.Where("id = ?", id).Delete(&tool).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return nil
 }

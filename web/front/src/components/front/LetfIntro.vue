@@ -1,9 +1,11 @@
 <template>
-    <a-space direction="vertical" :size="size">
+    <a-space class="introSpace" direction="vertical" :size="size">
         <a-card :hoverable="true">
             <a-avatar :size="81" src="http://rzp1xpqex.hn-bkt.clouddn.com/grw.jpg"/>
             <h2 style="text-align: center;">Macle</h2>
-            <p style="text-align: center; font-size: 16px;">座右铭</p>
+            <p style="text-align: center; font-size: 16px;">
+                既往不念，当下不杂，未来不迎
+            </p>
             <a-row 
                 style="width: 100%;
                     display: flex; 
@@ -33,7 +35,7 @@
                     <h3>{{ catetotal }}</h3>
                 </a-col>
                 <a-col :span="8">
-                    <h3>XX</h3>
+                    <h3>{{ tagtotal }}</h3>
                 </a-col>
             </a-row>
             <a-button 
@@ -112,27 +114,9 @@
                 <h2 style="display: inline;">标签</h2>
             </div>
             
-            <div>
-              <a-tag color="pink">
-                pink
-              </a-tag>
-              <a-tag color="red">
-                red
-              </a-tag>
-              <a-tag color="orange">
-                orange
-              </a-tag>
-              <a-tag color="green">
-                green
-              </a-tag>
-              <a-tag color="cyan">
-                cyan
-              </a-tag>
-              <a-tag color="blue">
-                blue
-              </a-tag>
-              <a-tag color="purple">
-                purple
+            <div  style="width: 100%;">
+              <a-tag v-for="item in taglist" color="blue" @click="goArtListByTag(item.id)">
+                {{ item.name }}
               </a-tag>
             </div>
         </a-card>
@@ -147,6 +131,8 @@ export default {
             arttotal: 0,
             catetotal: 0,
             catestat: [],
+            taglist: [],
+            tagtotal: 0,
             size: 'middle',
         }
     },
@@ -176,6 +162,18 @@ export default {
             if (res.status != 200) return this.$message.error(res.msg)
             this.winnow = res.data
         },
+        // 获取标签列表
+        async getTags() {
+            const { data : res } = await this.$http.get('tags')
+            if (res.status != 200) return this.$message.error(res.msg)
+            this.taglist = res.data
+            if (res.data != null)
+            this.tagtotal = res.data.length
+        },
+        // 进入标签下的文章列表
+        goArtListByTag(tid) {
+            this.$router.push(`/blog/tag/${ tid }`).catch((err) => err )
+        },
         // 阅读文章
         readArticle(id) {
               this.$router.push(`/blog/article/${ id }`).catch((err) => err )
@@ -189,11 +187,16 @@ export default {
         this.getArtCount()
         this.getWinnowList()
         this.getCateStat()
+        this.getTags()
     },
     }
 </script>
 
 <style scoped>
+.introSpace {
+    display: flex;
+    flex-direction: column;
+}
 .ant-card {
     flex: auto;
     border-radius: 10px;

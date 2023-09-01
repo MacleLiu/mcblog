@@ -10,6 +10,8 @@ import AddArt from '../components/article/AddArt'
 import ArtList from '../components/article/ArtList'
 import CateList from '../components/category/CateList'
 import UserList from '../components/user/UserList'
+import ToolList from '../components/tool/ToolList'
+import WishList from '../components/wish/WishList'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,8 @@ const routes = [
             {path: 'articles', component: ArtList},
             {path: 'categories', component: CateList},
             {path: 'users', component: UserList},
+            {path: 'tools', component: ToolList},
+            {path: 'wishs', component: WishList},
         ]
     }
 ]

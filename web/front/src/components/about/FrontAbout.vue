@@ -5,7 +5,7 @@
             <h1 style="display: inline;">关于</h1>
         </div>
         <p style="font-size: 16px; color: black;">
-            你好，我是刘满春Macle。<br>
+            你好，我是Macle。<br>
             正在计算机知识的海洋里漂泊。<br>
             喜欢骑行。<br>
             喜欢火锅。<br>

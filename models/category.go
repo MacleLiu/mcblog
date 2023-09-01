@@ -68,7 +68,7 @@ func GetCategory(id int) (Category, error) {
 	return cate, nil
 }
 
-// 查询分类列表
+// 分页查询分类列表
 func GetCategories(pageSize, pageNum int) ([]Category, int64, error) {
 	var cates []Category
 	var total int64
@@ -110,4 +110,16 @@ func DeleteCategory(id int) error {
 		return errno.New(errno.ERROR, err)
 	}
 	return nil
+}
+
+// 查询分类下的文章
+func GetCateArticles(cid int, pageSize, pageNum int) ([]Article, int64, error) {
+	var arts []Article
+	var total int64
+	err := db.Preload("Category").Where("cid = ?", cid).Find(&arts).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, 0, errno.New(errno.ERROR, err)
+	}
+
+	return arts, total, nil
 }
