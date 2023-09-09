@@ -23,3 +23,6 @@ go.work
 *.log
 config.toml
 mcblog
+.tar
+.gz
+.tar.gz
