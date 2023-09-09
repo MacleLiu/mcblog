@@ -46,7 +46,7 @@
                             <span>{{ artInfo.Category.name }}</span>
                         </div>
                         <!-- 文章内容 -->
-                        <div v-html="artInfo.content" style="width: 100%; font-size: 16px;"></div>
+                        <div v-html="artInfo.content" style="width: 100%; font-size: 16px; color: black;"></div>
                         <hr style="width: 100%; border: 1px dashed skyblue;">
                         <!-- 文章标签 -->
                         <div style="width: 100%;">
