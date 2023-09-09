@@ -18,6 +18,7 @@ type Mysql struct {
 	User     string `toml:"user"`
 	Password string `toml:"password"`
 	DbName   string `toml:"db_name"`
+	Loc      string `toml:"loc"`
 }
 
 type QiNiu struct {

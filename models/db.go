@@ -16,13 +16,13 @@ var db *gorm.DB
 var err error
 
 func InitDb() {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=",
 		config.AppConfig.Mysql.User,
 		config.AppConfig.Mysql.Password,
 		config.AppConfig.Mysql.Host,
 		config.AppConfig.Mysql.Port,
 		config.AppConfig.Mysql.DbName,
-	)
+	) + config.AppConfig.Mysql.Loc
 	//fmt.Println(dsn)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{

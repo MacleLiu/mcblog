@@ -13,6 +13,7 @@ port = ""
 user = ""
 password = ""
 db_name = ""
+loc = "Asia%2FShanghai" # GORM时区设置
 
 # 七牛云对象存储配置
 [qiniu]
