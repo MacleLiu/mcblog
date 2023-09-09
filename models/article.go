@@ -32,12 +32,12 @@ func CheckArticleExist(id int) error {
 }
 
 // 新增文章
-func CreateArticle(art *Article) error {
+func CreateArticle(art *Article) (uint, error) {
 	err = db.Create(art).Error
 	if err != nil {
-		return errno.New(errno.ERROR, err)
+		return 0, errno.New(errno.ERROR, err)
 	}
-	return nil
+	return art.ID, nil
 }
 
 // 查询单个文章

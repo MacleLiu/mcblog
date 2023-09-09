@@ -20,10 +20,11 @@ func AddArticle(ctx *gin.Context) {
 		return
 	}
 
-	err := models.CreateArticle(&art)
+	id, err := models.CreateArticle(&art)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
+		"data":   id, // 添加成功返回id, 用于添加标签
 		"msg":    errno.GetMsg(err),
 	})
 }

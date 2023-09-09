@@ -35,7 +35,7 @@ export default {
                 showTotal: (total) => `共${ total }条`,
                 onChange: (page) => {
                     this.queryParam.pagenum = page
-                    this.getArtList()
+                    this.getToolList()
                 }
             },
         }

@@ -11,9 +11,9 @@
                 <span slot="title"><a-icon type="file" /><span>文章管理</span></span>
                 <a-menu-item key="addArt"><a-icon type="form" /><span>写文章</span></a-menu-item>
                 <a-menu-item key="articles"><a-icon type="unordered-list" /><span>文章列表</span></a-menu-item>
+                <a-menu-item key="categories"><a-icon type="book" /><span>分类列表</span></a-menu-item>
+            <a-menu-item key="tags"><a-icon type="tags" /><span>标签列表</span></a-menu-item>
             </a-sub-menu>
-
-            <a-menu-item key="categories"><a-icon type="book" /><span>分类列表</span></a-menu-item>
 
             <a-menu-item key="users"><a-icon type="user" /><span>用户列表</span></a-menu-item>
             <a-menu-item key="tools"><a-icon type="tool" /><span>工具列表</span></a-menu-item>

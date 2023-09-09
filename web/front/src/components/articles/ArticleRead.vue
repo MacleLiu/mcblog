@@ -50,7 +50,7 @@
                         <hr style="width: 100%; border: 1px dashed skyblue;">
                         <!-- 文章标签 -->
                         <div style="width: 100%;">
-                            <a-tag v-for="item in taglist" color="blue">
+                            <a-tag v-for="item in taglist" :key="item.id" color="blue">
                                 {{ item.name }}
                             </a-tag>
                         </div>
@@ -68,6 +68,8 @@
 <script>
 import FrontHeader from '../front/FrontHeader'
 import FrontFooter from '../front/FrontFooter'
+
+import Prism from "prismjs";
 
 export default {
     components: {FrontHeader, FrontFooter},
@@ -110,8 +112,11 @@ export default {
     },
 
     created() {
-        this.getArtInfo(this.id)
-        this.getArtTags(this.id)
+        Promise.all([this.getArtInfo(this.id), this.getArtTags(this.id)]).then(()=>{
+            Prism.highlightAll()  //  代码高亮渲染函数
+        })
+        // this.getArtInfo(this.id)
+        // this.getArtTags(this.id)
     },
 }
 </script>

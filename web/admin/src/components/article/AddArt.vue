@@ -72,7 +72,6 @@
                           :style="{ width: '78px' }"
                           :value="inputValue"
                           @change="handleInputChange"
-                          @blur="handleInputConfirm"
                           @keyup.enter="handleInputConfirm"
                         />
                         <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
@@ -135,19 +134,23 @@
             },
             // 确认新增标签输入
             handleInputConfirm() {
-              const inputValue = this.inputValue;
-              if (inputValue && this.taglist.indexOf(inputValue) === -1) {
-                this.addTag(inputValue)
-              }
-              Object.assign(this, {
-                inputVisible: false,
-                inputValue: '',
-              });
+                const inputValue = this.inputValue;
+                if (inputValue && JSON.stringify(this.taglist).indexOf(JSON.stringify(inputValue)) === -1) {
+                    this.addTag(inputValue)
+                } else {
+                    this.$message.error("标签已存在")
+                }
+                Object.assign(this, {
+                    inputVisible: false,
+                    inputValue: '',
+                });
             },
             //选择标签
             selectTag(tag) {
-                if (tag && this.artTags.indexOf(tag) === -1) {
+                if (tag && JSON.stringify(this.artTags).indexOf(JSON.stringify(tag)) === -1) {
                     this.artTags = [...this.artTags, tag]
+                } else {
+                    return this.$message.error("标签重复")
                 }
             },
             // 新增标签
@@ -206,6 +209,7 @@
             async upArticleTags(id) {
                 const { data : res } = await this.$http.put(`tag/article/${ id }`,this.artTags)
                 if (res.status != 200) return this.$message.error(res.msg)
+                // this.$message.success('更新标签成功')
             },
             // 提交或更新
             submitInfo(id){
@@ -214,6 +218,7 @@
                         if (id === 0) {
                             const { data : res } = await this.$http.post('article/add', this.artInfo)
                             if (res.status !== 200) return this.$message.error(res.msg)
+                            this.upArticleTags(res.data)
                             this.$router.push('/admin/articles')
                             this.$message.success('添加文章成功')
                         } else {

@@ -38,6 +38,20 @@ func CheckTagName(name string) error {
 	return errno.New(errno.ERROR, err)
 }
 
+// 检查标签是否存在
+func CheckTag(id int) error {
+	var tag Tag
+	err := db.Select("name").Where("id = ?", id).First(&tag).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errno.New(errno.ERROR_TAG_NOT_EXIST, err)
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	return nil
+}
+
 // 新增标签
 func CreateTag(tag *Tag) error {
 	err = db.Create(tag).Error
@@ -79,6 +93,36 @@ func GetTags() ([]Tag, int64, error) {
 // 	return tags, total, nil
 // }
 
+// 编辑标签信息
+func EditTag(id int, data Tag) error {
+	var tag Tag
+	dataMap := make(map[string]any)
+	dataMap["name"] = data.Name
+
+	err = db.Model(&tag).Where("id = ?", id).Updates(dataMap).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return nil
+}
+
+// 检查标签是否被使用
+func CheckTagUsed(id int) error {
+	var artTag ArticleTag
+	err := db.Where("tag_id = ?", id).First(&artTag).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	if artTag.ID > 0 {
+		return errno.New(errno.ERROR_TAG_DELETE_USED, err)
+	}
+	return errno.New(errno.ERROR, err)
+}
+
 // 删除标签
 func DeleteTag(id int) error {
 	var tag Tag
@@ -95,7 +139,7 @@ func GetTagArticles(tid int, pageSize, pageNum int) ([]Article, int64, error) {
 	var total int64
 	// 将文章标签关联表和标签表结合成一个新的衍生表
 	// query := db.Table("article_tag").Select("art_id", "tag_id").Joins("join tag on article_tag.tag_id = tag.id").Where("tag.id = ?", tid)
-	// err := db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc").Joins("join (?) q on article.id = q.art_id", query).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+	// err := db.Preload("Tag").Model(&arts).Select("id", "created_at", "title", "cid", "desc").Joins("join (?) q on article.id = q.art_id", query).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 	err := db.Preload("Category").Model(&arts).Select("article.id", "created_at", "title", "cid", "desc").Joins("join article_tag on article.id = article_tag.art_id AND article_tag.tag_id = ?", tid).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return arts, 0, errno.New(errno.ERROR, err)
@@ -132,6 +176,16 @@ func UpdateArticleTags(aid int, tags []Tag) error {
 		if err != nil {
 			return errno.New(errno.ERROR, err)
 		}
+	}
+	return nil
+}
+
+// 删除文章标签
+func DeleteArticleTags(aid int) error {
+	var atag ArticleTag
+	err := db.Where("art_id = ?", aid).Delete(&atag).Error
+	if err != nil {
+		return errno.New(errno.ERROR, err)
 	}
 	return nil
 }

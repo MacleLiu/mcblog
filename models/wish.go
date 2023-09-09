@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"mcblog/utils/errno"
 
 	"gorm.io/gorm"
@@ -35,7 +36,8 @@ func GetWish(id int) (Wish, error) {
 func GetWishes(pageSize, pageNum int) ([]Wish, int64, error) {
 	var wishs []Wish
 	var total int64
-	err := db.Find(&wishs).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	err := db.Model(&wishs).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&wishs).Error
+	fmt.Println(len(wishs))
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}

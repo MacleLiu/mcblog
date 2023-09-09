@@ -2,7 +2,7 @@
     <!-- 归档时间轴区域 -->
     <a-card :hoverable="true" v-title data-title="归档">
         <a-timeline :reverse="true">
-            <a-timeline-item v-for="item in artInfo">
+            <a-timeline-item v-for="item in artInfo" :key="item.ID">
                 <span style="margin-right: 10px;">{{ item.CreatedAt | dateFormat }}</span>
                 <span class="withLink" style="font-size: 16px; font-weight: bold;" @click="readArticle(item.ID)">{{ item.title }}</span>
             </a-timeline-item>

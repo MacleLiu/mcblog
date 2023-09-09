@@ -12,6 +12,7 @@ import CateList from '../components/category/CateList'
 import UserList from '../components/user/UserList'
 import ToolList from '../components/tool/ToolList'
 import WishList from '../components/wish/WishList'
+import TagList from '../components/tag/TagList'
 
 Vue.use(VueRouter)
 
@@ -32,11 +33,13 @@ const routes = [
             {path: 'users', component: UserList},
             {path: 'tools', component: ToolList},
             {path: 'wishs', component: WishList},
+            {path: 'tags', component: TagList},
         ]
     }
 ]
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 })
 

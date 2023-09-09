@@ -157,7 +157,7 @@
                     okType: 'danger',
                     cancelText: '取消',
                     onOk: async () => {
-                        const res = await this.$http.delete(`category/${id}`)
+                        const { data : res } = await this.$http.delete(`category/${id}`)
                         if (res.status != 200) return this.$message.error(res.msg)
                         this.$message.success('删除成功')
                         this.getCateList()
@@ -204,9 +204,9 @@
                         })
                         if (res.status !== 200) return this.$message.error(res.msg)
                         this.editCateVisible = false
-                        this.$message.success('更新用户成功')
+                        this.$message.success('更新标签成功')
                         this.$refs.editCateRef.resetFields() // 重置表单
-                        this.getCateList() // 刷新用户列表
+                        this.getCateList() // 刷新标签列表
                     } else {
                         return this.$message.error('参数不符合要求，请检查')
                     }

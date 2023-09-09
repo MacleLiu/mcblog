@@ -25,6 +25,7 @@ func AddCategory(ctx *gin.Context) {
 		return
 	}
 
+	// 检查分类是否已存在
 	err := models.CheckCategoryName(cate.Name)
 	if err == nil {
 		err = errno.New(errno.ERROR_CATE_USED, err)
@@ -104,11 +105,16 @@ func EditCategory(ctx *gin.Context) {
 			"status": errno.GetCode(err),
 			"msg":    errno.GetMsg(err),
 		})
-
 		return
 	}
 
-	err := models.EditCategory(id, cate)
+	// 检查分类名是否已使用
+	err := models.CheckCategoryName(cate.Name)
+	if err == nil {
+		err = errno.New(errno.ERROR_CATE_USED, err)
+	} else if errno.GetCode(err) == errno.ERROR_CATE_NOT_EXIST {
+		err = models.EditCategory(id, cate)
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -128,6 +134,15 @@ func DeleteCategory(ctx *gin.Context) {
 			"msg":    errno.GetMsg(err),
 		})
 
+		return
+	}
+
+	// 检查分类是否正在被使用
+	if err := models.CheckCateUsed(id); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": errno.GetCode(err),
+			"msg":    errno.GetMsg(err),
+		})
 		return
 	}
 

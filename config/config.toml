@@ -15,5 +15,5 @@ db_name = "mcblog"
 [qiniu]
 access_key = "IwThxYMPEv97Z5-BcYGWpp3ftGatklH9kl0Wc-fu"
 secret_key = "5vNGKdKzbRQjR0yneHICL44aHOs-3UZYELeIxJII"
-bucket = "mcblog6"
-qiniu_server = "http://rzp1xpqex.hn-bkt.clouddn.com"
+bucket = "macleblog"
+qiniu_server = "https://qiniu.macleliu.com"

@@ -95,14 +95,14 @@
         data() {
             return {
                 pagination: {
-                    pageSizeOptions: ['5', '10', '20'],
-                    pageSize: 5,
+                    pageSizeOptions: ['10', '15', '20'],
+                    pageSize: 10,
                     total: 0,
                     showSizeChanger: true,
                     showTotal: (total) => `共${ total }条`,
                 },
                 queryParam: {
-                    pagesize: 5,
+                    pagesize: 10,
                     pagenum: 1,
                     title: '',
                 },
@@ -151,6 +151,11 @@
             addArt() {
                 this.$router.push(`/admin/addart`)
             },
+            // 删除文章标签（删除关联关系）
+            async delArticleTags(id) {
+                const { data : res } = await this.$http.delete(`tag/article/${ id }`)
+                if (res.status != 200) return this.$message.error(res.msg)
+            },
             // 删除文章
             delArt(id) {
                 this.$confirm({
@@ -160,8 +165,9 @@
                     okType: 'danger',
                     cancelText: '取消',
                     onOk: async () => {
-                        const res = await this.$http.delete(`article/${id}`)
+                        const { data : res } = await this.$http.delete(`article/${id}`)
                         if (res.status != 200) return this.$message.error(res.msg)
+                        this.delArticleTags(id)
                         this.$message.success('删除成功')
                         this.getArtList()
                     },

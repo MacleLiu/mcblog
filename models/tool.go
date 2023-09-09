@@ -21,7 +21,7 @@ func CreateTool(tool *Tool) error {
 	return nil
 }
 
-// 查询单个分类信息
+// 查询单个工具信息
 func GetTool(id int) (Tool, error) {
 	var tool Tool
 	err := db.Where("id = ?", id).First(&tool).Error
@@ -35,7 +35,7 @@ func GetTool(id int) (Tool, error) {
 func GetTools(pageSize, pageNum int) ([]Tool, int64, error) {
 	var tools []Tool
 	var total int64
-	err := db.Find(&tools).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	err := db.Model(&tools).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&tools).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}

@@ -1,7 +1,7 @@
 <template>
     <a-space class="introSpace" direction="vertical" :size="size">
         <a-card :hoverable="true">
-            <a-avatar :size="81" src="http://rzp1xpqex.hn-bkt.clouddn.com/grw.jpg"/>
+            <a-avatar :size="81" src="https://qiniu.macleliu.com/grw.jpg"/>
             <h2 style="text-align: center;">Macle</h2>
             <p style="text-align: center; font-size: 16px;">
                 既往不念，当下不杂，未来不迎
@@ -115,7 +115,7 @@
             </div>
             
             <div  style="width: 100%;">
-              <a-tag v-for="item in taglist" color="blue" @click="goArtListByTag(item.id)">
+              <a-tag v-for="item in taglist" :key="item.id" color="blue" @click="goArtListByTag(item.id)">
                 {{ item.name }}
               </a-tag>
             </div>

@@ -72,7 +72,7 @@ func GetCategory(id int) (Category, error) {
 func GetCategories(pageSize, pageNum int) ([]Category, int64, error) {
 	var cates []Category
 	var total int64
-	err := db.Find(&cates).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	err := db.Model(&cates).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cates).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}
@@ -102,6 +102,23 @@ func EditCategory(id int, data Category) error {
 	return nil
 }
 
+// 检查分类是否被使用
+func CheckCateUsed(id int) error {
+	var art Article
+	err := db.Where("cid = ?", id).First(&art).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return errno.New(errno.ERROR, err)
+	}
+
+	if art.ID > 0 {
+		return errno.New(errno.ERROR_CATE_DELETE_USED, err)
+	}
+	return errno.New(errno.ERROR, err)
+}
+
 // 删除分类
 func DeleteCategory(id int) error {
 	var cate Category
@@ -112,11 +129,11 @@ func DeleteCategory(id int) error {
 	return nil
 }
 
-// 查询分类下的文章
+// 分页查询分类下的文章
 func GetCateArticles(cid int, pageSize, pageNum int) ([]Article, int64, error) {
 	var arts []Article
 	var total int64
-	err := db.Preload("Category").Where("cid = ?", cid).Find(&arts).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	err := db.Preload("Category").Where("cid = ?", cid).Model(&arts).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}

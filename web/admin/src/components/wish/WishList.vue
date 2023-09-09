@@ -173,7 +173,7 @@
                     okType: 'danger',
                     cancelText: '取消',
                     onOk: async () => {
-                        const res = await this.$http.delete(`wish/${id}`)
+                        const { data : res } = await this.$http.delete(`wish/${id}`)
                         if (res.status != 200) return this.$message.error(res.msg)
                         this.$message.success('删除成功')
                         this.getWishList()

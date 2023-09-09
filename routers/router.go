@@ -37,8 +37,11 @@ func RouterInit(r *gin.Engine) {
 		auth.PUT("wish/:id", v1.EditWish)      // 修改心愿信息
 		auth.DELETE("wish/:id", v1.DeleteWish) // 删除心愿
 
-		auth.POST("tag/add", v1.AddTag)                   // 新增标签
-		auth.PUT("tag/article/:id", v1.UpdateArticleTags) //修改文章标签
+		auth.POST("tag/add", v1.AddTag)                      // 新增标签
+		auth.DELETE("tag/:id", v1.DeleteTag)                 // 删除标签
+		auth.PUT("tag/:id", v1.EditTag)                      // 修改标签信息
+		auth.PUT("tag/article/:id", v1.UpdateArticleTags)    //修改文章标签
+		auth.DELETE("tag/article/:id", v1.DeleteArticleTags) //删除文章标签
 	}
 
 	//公共资源

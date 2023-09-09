@@ -6,7 +6,7 @@
 
 <script>
     import Editor from '@tinymce/tinymce-vue'
-    import tinymce from './tinymce.min.js'
+    import './tinymce.min.js'
     import './icons/default/icons.min.js'
     import './themes/silver/theme.min.js'
     import './models/dom/model.min.js'
@@ -21,7 +21,6 @@
     import './plugins/link/plugin.min.js'
     import './plugins/anchor/plugin.min.js'
 
-
     export default {
         components: { Editor },
         props: {
@@ -35,9 +34,25 @@
                 init: {
                     language: 'zh-Hans',
                     height: 800,
-                    plugins: 'preview code codesample wordcount image link unlink anchor',
+                    plugins: 'preview code codesample wordcount image link anchor',
+                    codesample_languages: [
+                        { text: 'HTML/XML', value: 'markup' },
+                        { text: 'JavaScript', value: 'javascript' },
+                        { text: 'CSS', value: 'css' },
+                        { text: 'PHP', value: 'php' },
+                        { text: 'Ruby', value: 'ruby' },
+                        { text: 'Python', value: 'python' },
+                        { text: 'Java', value: 'java' },
+                        { text: 'C', value: 'c' },
+                        { text: 'C#', value: 'csharp' },
+                        { text: 'C++', value: 'cpp' },
+                        { text: 'SQL', value: 'sql' },
+                        { text: 'Go', value: 'go' },
+                        { text: 'Shell', value: 'shell' },
+                        { text: 'ProtoBuf', value: 'protobuf' },
+                    ],
                     toolbar1: 'undo redo | styles bold italic | alignleft aligncenter alignright alignjustify | outdent indent | preview code',
-                    toolbar2: 'paste copy cut | codesample image | link unlink anchor',
+                    toolbar2: 'paste copy cut | codesample image | link anchor',
                     // 上传图片
                     images_upload_handler: (blobInfo, progress) => new Promise(async (resolve, reject) => {
                         let formData = new FormData()
@@ -65,5 +80,5 @@
 </script>
 
 <style>
-    @import './skins/ui/oxide/skin.min.css';
+    /* @import './skins/ui/oxide/skin.min.css'; */
 </style>
