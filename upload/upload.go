@@ -22,9 +22,9 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, error) {
 
 	cfg := storage.Config{}
 	// 空间对应的机房
-	cfg.Region = &storage.ZoneHuanan
+	cfg.Region = &storage.ZoneBeimei
 	// 是否使用https域名
-	cfg.UseHTTPS = false
+	cfg.UseHTTPS = true
 	// 上传是否使用CDN上传加速
 	cfg.UseCdnDomains = false
 
@@ -38,5 +38,5 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, error) {
 		return "", errno.New(errno.ERROR, err)
 	}
 
-	return config.AppConfig.QiNiu.QiNiuServer + ret.Key, nil
+	return config.AppConfig.QiNiu.QiNiuServer + "/" + ret.Key, nil
 }

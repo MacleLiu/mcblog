@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"mcblog/modles"
+	"mcblog/models"
 	"mcblog/utils/errno"
 	"net/http"
 	"strconv"
@@ -11,7 +11,7 @@ import (
 
 // 添加文章
 func AddArticle(ctx *gin.Context) {
-	var art modles.Article
+	var art models.Article
 	if err := ctx.ShouldBindJSON(&art); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": errno.ERROR,
@@ -20,10 +20,11 @@ func AddArticle(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.CreateArticle(&art)
+	id, err := models.CreateArticle(&art)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
+		"data":   id, // 添加成功返回id, 用于添加标签
 		"msg":    errno.GetMsg(err),
 	})
 }
@@ -31,7 +32,7 @@ func AddArticle(ctx *gin.Context) {
 // 查询单个文章
 func GetArticle(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
-	art, err := modles.GetArticle(id)
+	art, err := models.GetArticle(id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -44,6 +45,7 @@ func GetArticle(ctx *gin.Context) {
 func GetArticles(ctx *gin.Context) {
 	pageSize, _ := strconv.Atoi(ctx.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(ctx.Query("pagenum"))
+	title := ctx.Query("title")
 
 	switch {
 	case pageSize >= 100:
@@ -56,12 +58,43 @@ func GetArticles(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	arts, total, err := modles.GetArticles(pageSize, pageNum)
+	arts, total, err := models.GetArticles(pageSize, pageNum, title)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
 		"data":   arts,
 		"total":  total,
+		"msg":    errno.GetMsg(err),
+	})
+}
+
+// 查询精选文章列表
+func GetWinnowArticles(ctx *gin.Context) {
+	arts, err := models.GetWinnowArticles()
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   arts,
+		"msg":    errno.GetMsg(err),
+	})
+
+}
+
+// 查询全部文章的基础信息
+func GetAllArtInfo(ctx *gin.Context) {
+	arts, err := models.GetAllArtInfo()
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   arts,
+		"msg":    errno.GetMsg(err),
+	})
+}
+
+// 查询文章总数
+func GetArticleCount(ctx *gin.Context) {
+	c, err := models.GetArticCuont()
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"data":   c,
 		"msg":    errno.GetMsg(err),
 	})
 }
@@ -83,7 +116,7 @@ func GetCateArticles(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	arts, total, err := modles.GetCateArticles(cid, pageSize, pageNum)
+	arts, total, err := models.GetCateArticles(cid, pageSize, pageNum)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),
@@ -95,7 +128,7 @@ func GetCateArticles(ctx *gin.Context) {
 
 // 编辑文章
 func EditArticle(ctx *gin.Context) {
-	var art modles.Article
+	var art models.Article
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if err := ctx.ShouldBindJSON(&art); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -105,9 +138,9 @@ func EditArticle(ctx *gin.Context) {
 		return
 	}
 
-	err := modles.CheckArticleExist(id)
+	err := models.CheckArticleExist(id)
 	if err == nil {
-		err = modles.EditArticle(id, art)
+		err = models.EditArticle(id, art)
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -121,9 +154,9 @@ func EditArticle(ctx *gin.Context) {
 func DeleteArticle(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	err := modles.CheckArticleExist(id)
+	err := models.CheckArticleExist(id)
 	if err == nil {
-		err = modles.DeleteArticle(id)
+		err = models.DeleteArticle(id)
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

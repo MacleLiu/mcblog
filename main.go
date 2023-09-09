@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"mcblog/config"
 	"mcblog/middlewares"
-	"mcblog/modles"
+	"mcblog/models"
 	"mcblog/routers"
 
 	"github.com/gin-gonic/gin"
@@ -16,18 +17,21 @@ type Config struct {
 
 func main() {
 	//初始化数据库
-	modles.InitDb()
-
+	fmt.Println("数据库初始化")
+	models.InitDb()
+	fmt.Println("数据库初始化完成")
 	gin.SetMode(config.AppConfig.Server.AppModel)
 
 	r := gin.New()
-	r.Use(middlewares.Logger(), middlewares.Cors())
+	r.Use(middlewares.Logger(), middlewares.Cors(), middlewares.TlsHandler())
 	r.Use(gin.Recovery())
 
 	routers.RouterInit(r)
 
 	//fmt.Println(config.AppConfig)
 
-	r.Run(config.AppConfig.Server.AppPort)
+	fmt.Println("服务启动完成")
+	r.RunTLS(config.AppConfig.Server.AppPort, "cacert.pem", "privkey.pem")
+	// r.Run(config.AppConfig.Server.AppPort)
 
 }

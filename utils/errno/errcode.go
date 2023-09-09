@@ -16,8 +16,13 @@ const (
 	//code=2000... 文章模块错误
 	ERROR_ARTICLE_NOT_EXIST = 2001
 	//code=3000... 分类模块错误
-	ERROR_CATE_USED      = 3001
-	ERROR_CATE_NOT_EXIST = 3002
+	ERROR_CATE_USED        = 3001
+	ERROR_CATE_NOT_EXIST   = 3002
+	ERROR_CATE_DELETE_USED = 3004
+	//code=4000... 标签模块错误
+	ERROR_TAG_USED        = 4001
+	ERROR_TAG_NOT_EXIST   = 4002
+	ERROR_TAG_DELETE_USED = 4003
 )
 
 var codemsg = map[int]string{
@@ -33,8 +38,13 @@ var codemsg = map[int]string{
 	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误",
 	ERROR_AUTH_DEFICIENT:   "权限不足",
 
-	ERROR_CATE_USED:      "该分类已存在",
-	ERROR_CATE_NOT_EXIST: "该分类不存在",
+	ERROR_CATE_USED:        "该分类已存在",
+	ERROR_CATE_NOT_EXIST:   "该分类不存在",
+	ERROR_CATE_DELETE_USED: "该分类正在使用",
+
+	ERROR_TAG_USED:        "该标签已存在",
+	ERROR_TAG_NOT_EXIST:   "该标签不存在",
+	ERROR_TAG_DELETE_USED: "该标签正在使用",
 
 	ERROR_ARTICLE_NOT_EXIST: "文章不存在",
 }

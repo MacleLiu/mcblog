@@ -84,8 +84,8 @@ func JWTAuth() gin.HandlerFunc {
 
 			err = errno.New(errno.ERROR_TOKEN_WRONG, err)
 			ctx.JSON(http.StatusOK, gin.H{
-				"satatus": errno.GetCode(err),
-				"msg":     errno.GetMsg(err),
+				"status": errno.GetCode(err),
+				"msg":    errno.GetMsg(err),
 			})
 			ctx.Abort()
 			return
