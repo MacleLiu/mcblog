@@ -1,2 +1,2 @@
 # mcblog
-gin+vue3实现的博客项目
+gin+vue2实现的博客项目
