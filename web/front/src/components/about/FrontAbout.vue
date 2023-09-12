@@ -28,7 +28,7 @@
         <h2>心愿单</h2>
         <!-- 愿望列表 -->
         <div style="width: 100%;">
-        <a-list item-layout="vertical" :bordered="false" :split="true" :pagination="pagination" :data-source="wishlist">
+        <a-list item-layout="vertical" :locale="defaultText" :loading="loading" :bordered="false" :split="true" :pagination="pagination" :data-source="wishlist">
             <a-list-item slot="renderItem" slot-scope="item, index">
                 <a-icon :class="item.status ? 'skyblue' : 'red'" style="margin-right: 10px;" type="heart" />
                 <span :class="item.status ? 'realize' : 'inProgress'">{{ item.name }}</span>
@@ -42,14 +42,18 @@
 export default {
     data() {
         return {
+            loading: true,
+            defaultText: {
+                emptyText: '暂无数据'
+            },
             wishlist: [],
             queryParam: {
-                pagesize: 10,
+                pagesize: 15,
                 pagenum: 1,
                 title: '',
             },
             pagination: {
-                pageSize: 10,
+                pageSize: 15,
                 total: 0,
                 showSizeChanger: false,
                 hideOnSinglePage: true,
@@ -62,17 +66,28 @@ export default {
         }
     },
     methods: {
-        // 查询工具列表
+        // 查询心愿列表
         async getWishList() {
-            const { data : res } = await this.$http.get('wishes', {
-                params: {
-                    pagesize: this.queryParam.pagesize,
-                    pagenum: this.queryParam.pagenum,
-                },
-            })
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.wishlist = res.data
-            this.pagination.total = res.total
+            try{
+                const { data : res } = await this.$http.get('wishes', {
+                    params: {
+                        pagesize: this.queryParam.pagesize,
+                        pagenum: this.queryParam.pagenum,
+                    },
+                })
+                if (res.status != 200){
+                    this.loading=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.wishlist = res.data
+                this.pagination.total = res.total
+                this.loading = false
+            }catch(err){
+                this.loading = false
+                this.defaultText.emptyText = err.message
+                return
+            }
         },
     },
     created() {

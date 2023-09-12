@@ -73,7 +73,7 @@
             </div>       
             <!-- 列表 -->
             <div style="width: 100%;">
-            <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="winnow">
+            <a-list item-layout="vertical" :locale="winnow_defaultText" :loading="winnow_load" :bordered="false" :split="false" :data-source="winnow">
                 <a-list-item slot="renderItem" slot-scope="item, index">
                     <div style="width: 100%; font-size: 15px; margin-bottom: 2px;" @click="readArticle(item.ID)">
                         <span class="withLink">{{ item.title }}</span>
@@ -97,7 +97,7 @@
             </div>
             <!-- 列表 -->
             <div style="width: 100%;">
-            <a-list item-layout="vertical" :bordered="false" :split="false" :data-source="catestat">
+            <a-list item-layout="vertical" :locale="cate_defaultText" :loading="cate_load" :bordered="false" :split="false" :data-source="catestat">
                 <a-list-item slot="renderItem" slot-scope="item, index">
                     <div class="withLink" style="width: 100%; font-size: 16px; display: flex; justify-content: space-between;" @click="goArtListByCate(item.id)">
                         <span>{{ item.name }}</span>
@@ -113,12 +113,13 @@
                 <ali-icon style="font-size: 20px; margin-right: 10px;" type="icon-24gf-tags4" />
                 <h2 style="display: inline;">标签</h2>
             </div>
-            
-            <div  style="width: 100%;">
-              <a-tag v-for="item in taglist" :key="item.id" color="blue" @click="goArtListByTag(item.id)">
-                {{ item.name }}
-              </a-tag>
-            </div>
+            <a-spin :spinning="tag_load">
+                <div style="width: 100%;">
+                <a-tag v-for="item in taglist" :key="item.id" color="blue" @click="goArtListByTag(item.id)">
+                    {{ item.name }}
+                </a-tag>
+                </div>
+            </a-spin>
         </a-card>
     </a-space>
 </template>
@@ -127,6 +128,15 @@
 export default {
     data() {
         return {
+            winnow_load: true,
+            cate_load: true,
+            tag_load: true,
+            winnow_defaultText:{
+                emptyText: '暂无数据'
+            },
+            cate_defaultText:{
+                emptyText: '暂无数据'
+            },
             winnow: [],
             arttotal: 0,
             catetotal: 0,
@@ -139,18 +149,34 @@ export default {
     methods: {
         // 获取文章总数
         async getArtCount() {
-            const { data : res } = await this.$http.get('articlecount', {
-            })
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.arttotal = res.data
+            try{
+                const { data : res } = await this.$http.get('articlecount', {
+                })
+                if (res.status != 200) return this.$message.error(res.msg)
+                this.arttotal = res.data
+            }catch(err){
+                console.log("getArtCount_ERROR: ", err)
+            }
         },
         // 获取分类统计
         async getCateStat() {
-            const { data : res } = await this.$http.get('catestat')
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.catestat = res.data
-            if (res.data != null)
-            this.catetotal = res.data.length
+            try{
+                const { data : res } = await this.$http.get('catestat')
+                if (res.status != 200){
+                    this.cate_load=false
+                    this.cate_defaultText.emptyText = res.msg
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.catestat = res.data
+                if (res.data != null)
+                this.catetotal = res.data.length
+                this.cate_load = false
+            }catch(err){
+                this.cate_load = false
+                this.cate_defaultText.emptyText = err.message
+                return
+            }
         },
         // 进入分类下的文章列表
         goArtListByCate(cid) {
@@ -158,17 +184,39 @@ export default {
         },
         // 查询精选文章列表
         async getWinnowList() {
-            const { data : res } = await this.$http.get('winnow')
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.winnow = res.data
+            try{
+                const { data : res } = await this.$http.get('winnow')
+                if (res.status != 200){
+                    this.winnow_load=false
+                    this.winnow_defaultText.emptyText = res.msg
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.winnow = res.data
+                this.winnow_load = false
+            }catch(err){
+                this.winnow_load = false
+                this.winnow_defaultText.emptyText = err.message
+                return
+            }
         },
         // 获取标签列表
         async getTags() {
-            const { data : res } = await this.$http.get('tags')
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.taglist = res.data
-            if (res.data != null)
-            this.tagtotal = res.data.length
+            try{
+                const { data : res } = await this.$http.get('tags')
+                if (res.status != 200){
+                    this.tag_load=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.taglist = res.data
+                if (res.data != null)
+                this.tagtotal = res.data.length
+                this.tag_load = false
+            }catch(err){
+                this.tag_load = false
+                return
+            }
         },
         // 进入标签下的文章列表
         goArtListByTag(tid) {

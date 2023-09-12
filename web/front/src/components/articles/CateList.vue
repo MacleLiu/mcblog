@@ -5,7 +5,7 @@
             <h2 style="display: inline;">分类{{ artlist.length === 0 ? '' : ' - ' + artlist[0].Category.name }}</h2>
             <hr style="width: 100%;" color="skyblue">
         </div>
-        <a-list item-layout="horizontal" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
+        <a-list :locale="defaultText" :loading="loading" item-layout="horizontal" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
             <a-list-item slot="renderItem" slot-scope="item, index">
                 <a-card :hoverable="true">
                     <div style="width: 100%;">
@@ -32,6 +32,10 @@ export default {
     props: ['cid'],
     data() {
         return {
+            loading: true,
+            defaultText: {
+                emptyText: '暂无数据'
+            },
             pagination: {
                 pageSize: 10,
                 total: 0,
@@ -55,19 +59,30 @@ export default {
     methods: {
         // 查询分类下文章列表
         async getArtListByCate(cid) {
-            const { data : res } = await this.$http.get(`article/cate/${ cid }`, {
-                params: {
-                    pagesize: this.queryParam.pagesize,
-                    pagenum: this.queryParam.pagenum,
-                },
-            })
-            if (res.status != 200) return this.$message.error(res.msg)
-            if (res.data.length === 0) {
-                this.$router.push(`/`).catch((err) => err )
-                return this.$message.warning("当前分类为空")
+            try{
+                const { data : res } = await this.$http.get(`article/cate/${ cid }`, {
+                    params: {
+                        pagesize: this.queryParam.pagesize,
+                        pagenum: this.queryParam.pagenum,
+                    },
+                })
+                if (res.status != 200){
+                    this.loading=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                if (res.data.length === 0) {
+                    this.$router.push(`/`).catch((err) => err )
+                    return this.$message.warning("当前分类为空")
+                }
+                this.artlist = res.data
+                this.pagination.total = res.total
+                this.loading=false
+            }catch(err){
+                this.loading = false
+                this.defaultText.emptyText = err.message
+                return
             }
-            this.artlist = res.data
-            this.pagination.total = res.total
         },
         // 阅读文章
         readArticle(id) {

@@ -16,6 +16,7 @@ import {
   Timeline,
   BackTop,
   Affix,
+  Spin,
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -50,3 +51,4 @@ Vue.use(Anchor)
 Vue.use(Timeline)
 Vue.use(BackTop)
 Vue.use(Affix)
+Vue.use(Spin)

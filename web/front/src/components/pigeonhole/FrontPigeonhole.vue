@@ -2,10 +2,12 @@
     <!-- 归档时间轴区域 -->
     <a-card :hoverable="true" v-title data-title="归档">
         <a-timeline :reverse="true">
-            <a-timeline-item v-for="item in artInfo" :key="item.ID">
-                <span style="margin-right: 10px;">{{ item.CreatedAt | dateFormat }}</span>
-                <span class="withLink" style="font-size: 16px; font-weight: bold;" @click="readArticle(item.ID)">{{ item.title }}</span>
-            </a-timeline-item>
+            <a-spin :spinning="loading">
+                <a-timeline-item v-for="item in artInfo" :key="item.ID">
+                    <span style="margin-right: 10px;">{{ item.CreatedAt | dateFormat }}</span>
+                    <span class="withLink" style="font-size: 16px; font-weight: bold;" @click="readArticle(item.ID)">{{ item.title }}</span>
+                </a-timeline-item>
+            </a-spin>
         </a-timeline>
     </a-card>
 </template>
@@ -14,14 +16,25 @@
 export default {
     data() {
         return {
+            loading: true,
             artInfo: [],
         }
     },
     methods: {
         async getArtInfo() {
-            const { data : res } = await this.$http.get('allartinfo')
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.artInfo = res.data
+            try{
+                const { data : res } = await this.$http.get('allartinfo')
+                if (res.status != 200){
+                    this.loading=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.artInfo = res.data
+                this.loading = false
+            }catch(err){
+                this.loading = false
+                return
+            }
         },
         // 阅读文章
         readArticle(id) {

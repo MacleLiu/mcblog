@@ -10,10 +10,12 @@
                             <div style="width: 100%; margin-bottom: 20px;">
                                 <h2 style="display: inline;">摘要</h2>
                             </div>
-                                <!-- 目录 -->
-                            <div style="width: 100%;">
-                                <p>{{ artInfo.desc }}</p>
-                            </div>
+                                <!-- 内容 -->
+                            <a-spin :spinning="art_loading">
+                                <div style="width: 100%;">
+                                    <p>{{ artInfo.desc }}</p>
+                                </div>
+                            </a-spin>
                         </a-card>
                         <!-- 目录卡片 -->
                         <a-card :hoverable="true">
@@ -32,10 +34,12 @@
             <a-col class="infoCol" :xs="24" :sm="24" :md="18" :lg="18" :xl="12">
                 <a-space direction="vertical" :size="size">
                     <a-card :hoverable="true">
-                        <!-- 文章标题 -->
-                        <h1>{{ artInfo.title }}</h1>
+                        <a-spin :spinning="art_loading" size="large">
+                            <!-- 文章标题 -->
+                            <h1>{{ artInfo.title }}</h1>
+                        </a-spin>
                         <hr style="width: 100%;" color="#DDDDDD">
-                        <div style="width: 100%; margin-bottom: 20px;">
+                        <div v-if="!art_loading" style="width: 100%; margin-bottom: 20px;">
                             <ali-icon type="icon-date1"/>
                             <span>发表于{{ artInfo.CreatedAt | dateFormat }}</span>
                             <span style="margin: 0 10px;">|</span>
@@ -50,9 +54,11 @@
                         <hr style="width: 100%; border: 1px dashed skyblue;">
                         <!-- 文章标签 -->
                         <div style="width: 100%;">
-                            <a-tag v-for="item in taglist" :key="item.id" color="blue">
-                                {{ item.name }}
-                            </a-tag>
+                            <a-spin :spinning="tag_loading" size="small">
+                                <a-tag v-for="item in taglist" :key="item.id" color="blue">
+                                    {{ item.name }}
+                                </a-tag>
+                            </a-spin>
                         </div>
                     </a-card>
                 </a-space>
@@ -77,6 +83,8 @@ export default {
 
     data() {
         return {
+            art_loading: true,
+            tag_loading: true,
             artInfo :{
                 id :0,
                 title: '',
@@ -98,16 +106,37 @@ export default {
     methods: {
         // 查询文章信息
         async getArtInfo(id) {
-            const { data : res } = await this.$http.get(`article/${ id }`)
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.artInfo = res.data
-            this.artInfo.id = res.data.ID
+            try{
+                const { data : res } = await this.$http.get(`article/${ id }`)
+                if (res.status != 200){
+                    this.art_loading = false
+                    this.$router.push(`/`).catch((err) => err )
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.artInfo = res.data
+                this.artInfo.id = res.data.ID
+                this.art_loading = false
+            }catch(err){
+                this.art_loading = false
+                return
+            }
         },
         // 查询文章标签
         async getArtTags(id) {
-            const { data : res } = await this.$http.get(`tags/${ id }`)
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.taglist = res.data
+            try{
+                const { data : res } = await this.$http.get(`tags/${ id }`)
+                if (res.status != 200){
+                    this.tag_loading = false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.taglist = res.data
+                this.tag_loading = false
+            }catch(err){
+                this.tag_loading = false
+                return
+            }
         },
     },
 

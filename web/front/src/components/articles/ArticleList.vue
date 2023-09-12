@@ -1,6 +1,6 @@
 <template>
     <a-space direction="vertical" :size="size">
-        <a-list item-layout="horizontal" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
+        <a-list item-layout="horizontal" :locale="defaultText" :loading="loading" :bordered="false" :split="false" :pagination="pagination" :data-source="artlist">
             <a-list-item slot="renderItem" slot-scope="item, index">
                 <a-card :hoverable="true">
                     <div style="width: 100%;">
@@ -26,6 +26,10 @@
 export default {
     data() {
         return {
+            loading: true,
+            defaultText: {
+                emptyText: '暂无数据'
+            },
             pagination: {
                 pageSize: 10,
                 total: 0,
@@ -49,16 +53,27 @@ export default {
     methods: {
         // 查询文章列表
         async getArtList() {
-            const { data : res } = await this.$http.get('articles', {
-                params: {
-                    pagesize: this.queryParam.pagesize,
-                    pagenum: this.queryParam.pagenum,
-                    title: this.queryParam.title,
-                },
-            })
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.artlist = res.data
-            this.pagination.total = res.total
+            try{
+                const { data : res } = await this.$http.get('articles', {
+                    params: {
+                        pagesize: this.queryParam.pagesize,
+                        pagenum: this.queryParam.pagenum,
+                        title: this.queryParam.title,
+                    },
+                })
+                if (res.status != 200){
+                    this.loading=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.artlist = res.data
+                this.pagination.total = res.total
+                this.loading=false
+            }catch(err){
+                this.loading = false
+                this.defaultText.emptyText = err.message
+                return
+            }
         },
         // 阅读文章
         readArticle(id) {

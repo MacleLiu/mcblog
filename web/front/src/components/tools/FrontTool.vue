@@ -6,7 +6,7 @@
         </div>       
         <!-- 列表 -->
         <div style="width: 100%;">
-        <a-list item-layout="vertical" :bordered="false" :split="true" :pagination="pagination" :data-source="toollist">
+        <a-list item-layout="vertical" :locale="defaultText" :loading="loading" :bordered="false" :split="true" :pagination="pagination" :data-source="toollist">
             <a-list-item slot="renderItem" slot-scope="item, index">
                 <div @click="openTool(item.url)">
                     <span class="toolName">{{ item.name }}</span>
@@ -21,6 +21,10 @@
 export default {
     data() {
         return {
+            loading: true,
+            defaultText: {
+                emptyText: '暂无数据'
+            },
             toollist: [],
             queryParam: {
                 pagesize: 16,
@@ -43,15 +47,26 @@ export default {
     methods: {
         // 查询工具列表
         async getToolList() {
-            const { data : res } = await this.$http.get('tools', {
-                params: {
-                    pagesize: this.queryParam.pagesize,
-                    pagenum: this.queryParam.pagenum,
-                },
-            })
-            if (res.status != 200) return this.$message.error(res.msg)
-            this.toollist = res.data
-            this.pagination.total = res.total
+            try{
+                const { data : res } = await this.$http.get('tools', {
+                    params: {
+                        pagesize: this.queryParam.pagesize,
+                        pagenum: this.queryParam.pagenum,
+                    },
+                })
+                if (res.status != 200){
+                    this.loading=false
+                    this.$message.error(res.msg)
+                    return
+                }
+                this.toollist = res.data
+                this.pagination.total = res.total
+                this.loading = false
+            }catch(err){
+                this.loading = false
+                this.defaultText.emptyText = err.message
+                return
+            }
         },
         openTool(url) {
             window.open(url, '_blank')
