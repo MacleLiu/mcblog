@@ -31,6 +31,9 @@
                 @change="handleTableChange"
                 bordered
             >
+                <span slot="winnow" slot-scope="art">
+                    <a-switch v-model="art.winnow" @change="setWinnow(art.ID)"/>
+                </span>
                 <span slot="img" class="imgSlot" slot-scope="img">
                     <img :src="img">
                 </span>
@@ -76,9 +79,16 @@
         {
             title: '缩略图',
             dataIndex: 'img',
-            width: '20%',
+            width: '10%',
             key: 'img',
             scopedSlots: {customRender: 'img'},
+            align: 'center',
+        },
+        {
+            title: '精选文章',
+            width: '10%',
+            key: 'winnow',
+            scopedSlots: {customRender: 'winnow'},
             align: 'center',
         },
         {
@@ -198,6 +208,12 @@
                 this.artlist = res.data
                 this.pagination.total = res.total
             },
+            // 设置精选文章
+            async setWinnow(id){
+                const { data : res } = await this.$http.put(`article/winnow/${ id }`)
+                if (res.status != 200) return this.$message.error(res.msg)
+                this.$message.success("修改成功")
+            }
         },
 
         created() {

@@ -164,3 +164,14 @@ func DeleteArticle(ctx *gin.Context) {
 		"msg":    errno.GetMsg(err),
 	})
 }
+
+// 设置精选文章
+func SetWinnow(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	err := models.SetWinnow(id)
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": errno.GetCode(err),
+		"msg":    errno.GetMsg(err),
+	})
+}

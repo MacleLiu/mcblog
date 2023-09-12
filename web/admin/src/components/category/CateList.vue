@@ -158,7 +158,10 @@
                     cancelText: '取消',
                     onOk: async () => {
                         const { data : res } = await this.$http.delete(`category/${id}`)
-                        if (res.status != 200) return this.$message.error(res.msg)
+                        if (res.status != 200){
+                            this.$message.error(res.msg)
+                            return
+                        }
                         this.$message.success('删除成功')
                         this.getCateList()
                     },

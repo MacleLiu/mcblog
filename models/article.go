@@ -130,3 +130,13 @@ func DeleteArticle(id int) error {
 	}
 	return nil
 }
+
+// 设置精选文章
+func SetWinnow(id int) error {
+	var err error
+	db.Exec("UPDATE article SET winnow = NOT winnow Where id = ?", id)
+	if err != nil {
+		return errno.New(errno.ERROR, err)
+	}
+	return err
+}
