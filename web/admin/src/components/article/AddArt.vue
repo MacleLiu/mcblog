@@ -80,7 +80,8 @@
                     </div>
                 </a-form-model-item>
                 <a-form-model-item>
-                    <a-button type="primary" @click="submitInfo(artInfo.id)">{{ artInfo.id ? '更新' : '提交' }}</a-button>
+                    <a-button style="margin-right: 20px;" type="primary" @click="submitInfo(artInfo.id)">{{ artInfo.id ? '更新' : '提交' }}</a-button>
+                    <a-button type="danger" @click="cancel">取消</a-button>
                 </a-form-model-item>
             </a-form-model>
         </a-card>
@@ -233,6 +234,19 @@
                     }
                 })
             },
+            cancel(){
+                this.$confirm({
+                    title: '确定要取消编辑吗?',
+                    content: '当前内容将会丢失',
+                    okText: '确定',
+                    okType: 'danger',
+                    cancelText: '取消',
+                    onOk: () => { 
+                        this.$router.go(-1)
+                    },
+                    onCancel() {},
+                })
+            }
         },
         created() {
             this.getCateList()

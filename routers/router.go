@@ -43,6 +43,7 @@ func RouterInit(r *gin.Engine) {
 		auth.PUT("tag/:id", v1.EditTag)                      // 修改标签信息
 		auth.PUT("tag/article/:id", v1.UpdateArticleTags)    //修改文章标签
 		auth.DELETE("tag/article/:id", v1.DeleteArticleTags) //删除文章标签
+
 	}
 
 	//公共资源
@@ -74,5 +75,8 @@ func RouterInit(r *gin.Engine) {
 		router.GET("/tags", v1.GetTags)            //获取标签列表
 		router.GET("/tag/:id", v1.GetTag)          //获取一个标签信息
 		router.GET("/tags/:id", v1.GetArticleTags) //获取指定文章的标签列表
+
+		router.POST("comment/add", v1.AddComment) // 新增评论
+		router.GET("comment/:id", v1.GetComment)  // 查询文章评论
 	}
 }

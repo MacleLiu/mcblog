@@ -11,6 +11,9 @@ Vue.config.productionTip = false
 Vue.filter('dateFormat', (dt) => {
   return dayjs(dt).format('YYYY-MM-DD')
 })
+Vue.filter('timeFormat', (dt) => {
+  return dayjs(dt).format('YYYY-MM-DD HH:mm:ss')
+})
 
 // 修改网页title的指令
 Vue.directive('title', {

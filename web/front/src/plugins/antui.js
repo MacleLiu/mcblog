@@ -17,6 +17,10 @@ import {
   BackTop,
   Affix,
   Spin,
+  Comment,
+  Form,
+  FormModel,
+  Modal,
 } from 'ant-design-vue'
 
 import Vue from 'vue'
@@ -52,3 +56,7 @@ Vue.use(Timeline)
 Vue.use(BackTop)
 Vue.use(Affix)
 Vue.use(Spin)
+Vue.use(Comment)
+Vue.use(Form)
+Vue.use(FormModel)
+Vue.use(Modal)

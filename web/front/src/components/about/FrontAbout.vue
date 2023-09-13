@@ -4,6 +4,8 @@
             <span style="font-size: 25px; margin-right: 10px;"><ali-icon type="icon-about" /></span>
             <h1 style="display: inline;">关于</h1>
         </div>
+        <hr style="width: 100%;" color="skyblue">
+        <h2>个人介绍</h2>
         <p style="font-size: 16px; color: black;">
             你好，我是Macle。<br>
             正在计算机知识的海洋里漂泊。<br>
