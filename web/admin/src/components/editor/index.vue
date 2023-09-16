@@ -53,6 +53,7 @@
                     ],
                     toolbar1: 'undo redo | styles bold italic | alignleft aligncenter alignright alignjustify | outdent indent | preview code',
                     toolbar2: 'paste copy cut | codesample image | link anchor',
+                    image_advtab: true,
                     // 上传图片
                     images_upload_handler: (blobInfo, progress) => new Promise(async (resolve, reject) => {
                         let formData = new FormData()

@@ -30,7 +30,7 @@
             @ok="addCateOk"
             @cancel="addCateCancel"
         >
-            <a-form-model :model="newCate" :rules="addCateRules" ref="addCateRef">
+            <a-form-model :model="newCate" :rules="cateRules" ref="addCateRef">
                 <a-form-model-item :hasFeedback="true" label="分类名" prop="name">
                     <a-input v-model="newCate.name"></a-input>
                 </a-form-model-item>
@@ -44,7 +44,7 @@
             @ok="editCateOk"
             @cancel="editCateCancel"
         >
-            <a-form-model :model="CateInfo" :rules="CateRules" ref="editCateRef">
+            <a-form-model :model="CateInfo" :rules="cateRules" ref="editCateRef">
                 <a-form-model-item :hasFeedback="true" label="分类名" prop="name">
                     <a-input v-model="CateInfo.name"></a-input>
                 </a-form-model-item>
@@ -104,14 +104,9 @@
                 newCate: {
                     name: '',
                 },
-                CateRules: {
+                cateRules: {
                     name: [
-                        { required: true, message: '请输入分类名', trigger: 'change' },
-                        { max: 20, message: '分类名不超过20个字符', trigger: 'change' },
-                    ],
-                },
-                addCateRules: {
-                    name: [
+                        { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' },
                         { required: true, message: '请输入分类名', trigger: 'change' },
                         { max: 20, message: '分类名不超过20个字符', trigger: 'change' },
                     ],

@@ -5,7 +5,7 @@
           <a-col class="introCol" :xs="24" :sm="24" :md="8" :lg="6" :xl="5">
             <LeftIntro/>
           </a-col>
-          <a-col class="infoCol" :xs="24" :sm="24" :md="16" :lg="18" :xl="13">
+          <a-col class="infoCol" :xs="24" :sm="24" :md="16" :lg="18" :xl="14">
             <ArticleList/>
           </a-col>
         </a-row>

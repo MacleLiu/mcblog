@@ -8,12 +8,12 @@ import (
 
 type Comment struct {
 	gorm.Model
-	Article Article `gorm:"foreignKey:Aid"`
-	Name    string  `gorm:"type:varchar(20);not null" json:"name"`
-	Content string  `gorm:"type:longtext" json:"content"`
-	Aid     int     `gorm:"type:int;not null" json:"artid"`
-	Toid    int     `gorm:"type:int;" json:"toid"`
-	Toname  string  `gorm:"type:varchar(20)" json:"toname"`
+	Article Article `gorm:"foreignKey:Aid"`                        // 外键
+	Name    string  `gorm:"type:varchar(20);not null" json:"name"` // 昵称
+	Content string  `gorm:"type:longtext" json:"content"`          // 评论内容
+	Aid     int     `gorm:"type:int;not null" json:"artid"`        // 关联文章id
+	Toid    int     `gorm:"type:int;" json:"toid"`                 // 上级评论id
+	Toname  string  `gorm:"type:varchar(20)" json:"toname"`        // 回复目标昵称
 }
 
 // 新增评论

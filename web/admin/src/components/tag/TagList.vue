@@ -30,7 +30,7 @@
             @ok="addTagOk"
             @cancel="addTagCancel"
         >
-            <a-form-model :model="newTag" :rules="addTagRules" ref="addTagRef">
+            <a-form-model :model="newTag" :rules="tagRules" ref="addTagRef">
                 <a-form-model-item :hasFeedback="true" label="标签名" prop="name">
                     <a-input v-model="newTag.name"></a-input>
                 </a-form-model-item>
@@ -44,7 +44,7 @@
             @ok="editTagOk"
             @cancel="editTagCancel"
         >
-            <a-form-model :model="TagInfo" :rules="TagRules" ref="editTagRef">
+            <a-form-model :model="TagInfo" :rules="tagRules" ref="editTagRef">
                 <a-form-model-item :hasFeedback="true" label="标签名" prop="name">
                     <a-input v-model="TagInfo.name"></a-input>
                 </a-form-model-item>
@@ -104,14 +104,9 @@
                 newTag: {
                     name: '',
                 },
-                TagRules: {
+                tagRules: {
                     name: [
-                        { required: true, message: '请输入标签名', trigger: 'change' },
-                        { max: 20, message: '标签名不超过20个字符', trigger: 'change' },
-                    ],
-                },
-                addTagRules: {
-                    name: [
+                        { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' },
                         { required: true, message: '请输入标签名', trigger: 'change' },
                         { max: 20, message: '标签名不超过20个字符', trigger: 'change' },
                     ],

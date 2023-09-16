@@ -2,7 +2,7 @@
     <div class="container" v-title data-title="文章">
         <FrontHeader/>
         <a-row class="readRow">
-            <a-col class="introCol" :xs="0" :sm="0" :md="6" :lg="6" :xl="4">
+            <a-col class="introCol" :xs="0" :sm="0" :md="6" :lg="6" :xl="5">
                 <a-affix :offset-top="top">
                     <a-space direction="vertical" :size="size">
                         <!-- 摘要卡片 -->
@@ -22,16 +22,17 @@
                             <div style="width: 100%; margin-bottom: 20px;">
                                 <h2 style="display: inline;">目录</h2>
                             </div>
-                                <!-- 目录 -->
-                            <div style="width: 100%;">
-                                <p>开发中......</p>
-                            </div>
+                            <!-- 目录 -->
+                            <a-anchor style="width: 100%;">
+                                <a-anchor-link v-for="item in catalog" :href="'#'+item.id" :title="item.title">
+                                </a-anchor-link>
+                            </a-anchor>
                         </a-card>
                     </a-space>
                 </a-affix>
             </a-col>
             
-            <a-col class="infoCol" :xs="24" :sm="24" :md="18" :lg="18" :xl="12">
+            <a-col class="infoCol" :xs="24" :sm="24" :md="18" :lg="18" :xl="14">
                 <a-space direction="vertical" :size="size">
                     <a-card :hoverable="true">
                         <a-spin :spinning="art_loading">
@@ -50,7 +51,7 @@
                             <span>{{ artInfo.Category.name }}</span>
                         </div>
                         <!-- 文章内容 -->
-                        <div v-html="artInfo.content" style="width: 100%; font-size: 16px; color: black;"></div>
+                        <div ref="content" v-html="artInfo.content" style="width: 100%; font-size: 16px; color: black;"></div>
                         <hr style="width: 100%; border: 1px dashed skyblue;">
                         <!-- 文章标签 -->
                         <div style="width: 100%;">
@@ -205,6 +206,7 @@ export default {
                 content: '',
                 img: '',
             },
+            catalog: [],
             taglist: [],
             size: 'middle',
             top: 10,
@@ -227,7 +229,11 @@ export default {
                 toname: '',  // 回复目标的昵称
             },
             commentRules: {
-                name: [{required: true, message: '请输入昵称', trigger: 'blur'}],
+                name: [
+                    { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' },
+                    {required: true, message: '请输入昵称', trigger: 'blur'},
+                    {max: 20, message: '昵称最大长度20字符', trigger: "change"},
+                ],
                 content: [{required: true, message: '请输入评论内容', trigger: 'blur'}],
             },
             replyVisible: false,
@@ -371,6 +377,39 @@ export default {
             this.reply_comment.content = ''
             this.replyVisible = false
         },
+        // 生成带锚点的文章目录
+        generateDirectory() {
+            console.log('generateDirectory')
+            const article_content = this.$refs.content;  // 获取文章内容
+            article_content.childNodes.forEach((e, index) => {
+                //具体执行步骤
+                console.log(e)
+            })
+        },
+    },
+
+    // 通过watch监听artInfo以能够成功获取v-html渲染的内容
+    watch: {
+        artInfo: function () {
+            this.$nextTick(() => {
+                const article_content = this.$refs.content
+                const titleTag = ["H1", "H2", "H3"]
+                let titles = []
+                article_content.childNodes.forEach((e, index) => {
+                    if (titleTag.includes(e.nodeName)) {
+                        const id = "header-" + index
+                        e.setAttribute("id", id)
+                        titles.push({
+                            id: id,
+                            title: e.innerHTML.replace(/<\/?.+?\/?>/g,''),  // 去除标题值中包含的其他标签
+                            level: Number(e.nodeName.substring(1, 2)),
+                            nodeName: e.nodeName,
+                        })
+                    }  
+                })
+                this.catalog = titles
+            })
+        }
     },
 
     created() {
@@ -424,7 +463,10 @@ export default {
     margin-bottom: 10px;
 }
 :deep img {
-    width: 100%;
+    max-width: 100%;
     height: auto;
+}
+:deep a {
+    white-space: pre-line;
 }
 </style>

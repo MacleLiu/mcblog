@@ -39,7 +39,7 @@
             @ok="addUserOk"
             @cancel="addUserCancel"
         >
-            <a-form-model :model="newUser" :rules="addUserRules" ref="addUserRef">
+            <a-form-model :model="newUser" :rules="userRules" ref="addUserRef">
                 <a-form-model-item :hasFeedback="true" label="用户名" prop="username">
                     <a-input v-model="newUser.username"></a-input>
                 </a-form-model-item>
@@ -148,9 +148,11 @@
                 userRules: {
                     username: [
                         { required: true, message: '请输入用户名', trigger: 'change' },
+                        { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' },
                         { min: 4, max: 12, message: '用户名在4到12个字符之间', trigger: 'change' },
                     ],
                     password: [
+                        { pattern: /^\S*$/, message: '密码不能有空格' },
                         {
                             required: true,
                             validator: (_, value, callback) => {
@@ -164,32 +166,34 @@
                                 }
                             },
                             trigger: 'change',
-                        }
+                        },
                     ],
                     checkpassword: [
+                        { pattern: /^\S*$/, message: '密码不能有空格' },
                         {
                             required: true,
                             validator: (_, value, callback) => {
                                 if (value === '') {
                                     callback(new Error('请输入密码'));
                                 } 
-                                if (value !== this.userInfo.password) {
+                                if (value !== this.newUser.password) {
                                     callback(new Error('密码不一致，请检查后重新输入'))
                                 } else {
                                     callback()
                                 }
                             },
                             trigger: 'change',
-                        }
+                        },
                     ],
                     
                 },
-                addUserRules: {
-                    username: [
-                        { required: true, message: '请输入用户名', trigger: 'change' },
-                        { min: 4, max: 12, message: '用户名在4到12个字符之间', trigger: 'change' },
-                    ],
-                },
+                // addUserRules: {
+                //     username: [
+                //         { required: true, message: '请输入用户名', trigger: 'change' },
+                //         { min: 4, max: 12, message: '用户名在4到12个字符之间', trigger: 'change' },
+                //         { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' },
+                //     ],
+                // },
                 editUserVisible: false,
             }
         },

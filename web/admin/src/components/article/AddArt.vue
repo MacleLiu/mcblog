@@ -114,7 +114,7 @@
                 fileList: [],
                 taglist:[],
                 artInfoRules: {
-                    title: [{required: true, message: '请输入文章标题', trigger: 'blur'}],
+                    title: [{required: true, message: '请输入文章标题', trigger: 'blur'}, { pattern: /(^\S)((.)*\S)?(\S*$)/, message: '首尾不能有空格' }],
                     desc: [{required: true, message: '请输入文章描述', trigger: 'blur'}, {max: 120, message: '描述内容最多120字符', trigger: "change"}],
                     content: [{required: true, message: '请输入文章内容', trigger: 'blur'}],
                 },
@@ -236,8 +236,8 @@
             },
             cancel(){
                 this.$confirm({
-                    title: '确定要取消编辑吗?',
-                    content: '当前内容将会丢失',
+                    title: '确定要取消吗?',
+                    content: '当前已编辑内容将会丢失',
                     okText: '确定',
                     okType: 'danger',
                     cancelText: '取消',
