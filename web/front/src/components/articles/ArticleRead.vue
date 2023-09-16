@@ -24,7 +24,7 @@
                             </div>
                             <!-- 目录 -->
                             <a-anchor style="width: 100%;">
-                                <a-anchor-link v-for="item in catalog" :href="'#'+item.id" :title="item.title">
+                                <a-anchor-link v-for="item in catalog" :key="item.id" :href="'#'+item.id" :title="item.title">
                                 </a-anchor-link>
                             </a-anchor>
                         </a-card>
@@ -117,6 +117,7 @@
                                     <a-comment
                                       v-if="item.children.length > 0"
                                       v-for="child in item.children"
+                                      :key="child.ID"
                                       :author="child.name === child.toname ? child.name : child.name + ' 回复 ' + child.toname"
                                       :content="child.content"
                                       :datetime="child.CreatedAt | timeFormat"
