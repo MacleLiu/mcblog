@@ -2,7 +2,7 @@
 jwtSecret = ""
 
 [server]
-# "debug"开发模式；"release"生成模式
+# "debug"开发模式；"release"生产模式
 app_model = "debug"
 app_port = ":8888"
 

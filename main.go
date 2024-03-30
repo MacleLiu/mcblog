@@ -30,7 +30,7 @@ func main() {
 
 	//fmt.Println(config.AppConfig)
 
-	fmt.Println("服务启动完成")
+	fmt.Println("服务初始化完成")
 	r.RunTLS(config.AppConfig.Server.AppPort, "cacert.pem", "privkey.pem")
 	// r.Run(config.AppConfig.Server.AppPort)
 

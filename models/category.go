@@ -133,7 +133,7 @@ func DeleteCategory(id int) error {
 func GetCateArticles(cid int, pageSize, pageNum int) ([]Article, int64, error) {
 	var arts []Article
 	var total int64
-	err := db.Preload("Category").Where("cid = ?", cid).Model(&arts).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+	err := db.Preload("Category").Where("cid = ?", cid).Model(&arts).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("created_at DESC").Find(&arts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
 	}

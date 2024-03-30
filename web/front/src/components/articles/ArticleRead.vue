@@ -1,16 +1,16 @@
 <template>
     <div class="container" v-title data-title="文章">
         <FrontHeader/>
+        <!-- <div style="background-color: rgb(240, 245, 245);"> -->
         <a-row class="readRow">
             <a-col class="introCol" :xs="0" :sm="0" :md="6" :lg="6" :xl="5">
-                <a-affix :offset-top="top">
-                    <a-space direction="vertical" :size="size">
+                    <a-space direction="vertical" :size="size" style="width: 100%;">
                         <!-- 摘要卡片 -->
                         <a-card :hoverable="true">
                             <div style="width: 100%; margin-bottom: 20px;">
                                 <h2 style="display: inline;">摘要</h2>
                             </div>
-                                <!-- 内容 -->
+                            <!-- 摘要内容 -->
                             <a-spin :spinning="art_loading">
                                 <div style="width: 100%;">
                                     <p>{{ artInfo.desc }}</p>
@@ -18,18 +18,21 @@
                             </a-spin>
                         </a-card>
                         <!-- 目录卡片 -->
+                        <a-affix :offset-top="80">
                         <a-card :hoverable="true">
                             <div style="width: 100%; margin-bottom: 20px;">
                                 <h2 style="display: inline;">目录</h2>
                             </div>
                             <!-- 目录 -->
-                            <a-anchor style="width: 100%;">
-                                <a-anchor-link v-for="item in catalog" :key="item.id" :href="'#'+item.id" :title="item.title">
-                                </a-anchor-link>
-                            </a-anchor>
+                            <a-spin :spinning="catalog_loading" style="width: 100%;">
+                                <a-anchor style="width: 100%;" @click="handleAnchorClick">
+                                    <a-anchor-link v-for="item in catalog" :key="item.id" :href="'#'+item.id" :title="item.title">
+                                    </a-anchor-link>
+                                </a-anchor>
+                            </a-spin>
                         </a-card>
+                        </a-affix>
                     </a-space>
-                </a-affix>
             </a-col>
             
             <a-col class="infoCol" :xs="24" :sm="24" :md="18" :lg="18" :xl="14">
@@ -44,7 +47,7 @@
                             <ali-icon type="icon-date1"/>
                             <span>发表于{{ artInfo.CreatedAt | dateFormat }}</span>
                             <span style="margin: 0 10px;">|</span>
-                            <ali-icon type="icon-folderopen"/>
+                            <ali-icon type="icon-date1"/>
                             <span>最后更新于{{ artInfo.UpdatedAt| dateFormat }}</span>
                             <span style="margin: 0 10px;">|</span>
                             <ali-icon type="icon-folderopen"/>
@@ -169,6 +172,7 @@
                 </div>
             </a-comment>
         </a-modal>
+        <!-- </div> -->
         <FrontFooter/>
         <div>
             <a-back-top :visibilityHeight="600"/>
@@ -191,6 +195,7 @@ export default {
         return {
             art_loading: true,
             tag_loading: true,
+            catalog_loading: true,
             comment_loading: true,
             comment_defaultText:{
                 emptyText: '快来发布第一条评论吧'
@@ -381,11 +386,15 @@ export default {
         // 生成带锚点的文章目录
         generateDirectory() {
             console.log('generateDirectory')
-            const article_content = this.$refs.content;  // 获取文章内容
+            const article_content = this.$refs.content  // 获取文章内容
             article_content.childNodes.forEach((e, index) => {
                 //具体执行步骤
                 console.log(e)
             })
+        },
+        // 阻止点击目录的默认事件修改路由
+        handleAnchorClick(e) {
+          e.preventDefault()
         },
     },
 
@@ -410,6 +419,7 @@ export default {
                 })
                 this.catalog = titles
             })
+            this.catalog_loading = false
         }
     },
 
@@ -427,7 +437,7 @@ export default {
 
 <style scoped>
 .container {
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -437,7 +447,8 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     align-content: flex-start;
-    margin: 40px 0;
+    padding: 80px 0 20px 0;
+    background-color: rgb(240, 245, 245);
 }
 .introCol {
     /* display: flex; */
@@ -462,6 +473,9 @@ export default {
 }
 .ant-tag {
     margin-bottom: 10px;
+}
+:deep .ant-anchor-wrapper {
+    max-height: 350px !important;
 }
 :deep img {
     max-width: 100%;

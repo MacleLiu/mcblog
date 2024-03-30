@@ -72,9 +72,9 @@ func GetArticles(pageSize, pageNum int, title string) ([]Article, int64, error) 
 	var total int64
 	var err error
 	if title == "" {
-		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("created_at DESC").Find(&arts).Error
 	} else {
-		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Where("title LIKE ?", title+"%").Find(&arts).Count(&total).Error
+		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Where("title LIKE ?", title+"%").Order("created_at DESC").Find(&arts).Count(&total).Error
 	}
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)

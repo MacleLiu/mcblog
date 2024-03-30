@@ -1,6 +1,9 @@
 <template>
     <div class="login">
         <div class="loginBox">
+            <div style="width: 100%; margin-top: 10px; text-align: center;">
+                <h1>McBlog后台管理登录</h1>
+            </div>
             <a-form-model ref="loginForm" :model="formdata" :rules="rules" class="loginForm">
                 <a-form-model-item prop="username">
                     <a-input v-model="formdata.username" placeholder="请输入用户名">

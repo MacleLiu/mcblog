@@ -20,6 +20,7 @@
     import './plugins/image/plugin.min.js'
     import './plugins/link/plugin.min.js'
     import './plugins/anchor/plugin.min.js'
+    import './plugins/autosave/plugin.min.js'
 
     export default {
         components: { Editor },
@@ -34,7 +35,8 @@
                 init: {
                     language: 'zh-Hans',
                     height: 800,
-                    plugins: 'preview code codesample wordcount image link anchor',
+                    selector: '#textarea1',
+                    plugins: 'preview code codesample wordcount image link anchor autosave',
                     codesample_languages: [
                         { text: 'HTML/XML', value: 'markup' },
                         { text: 'JavaScript', value: 'javascript' },
@@ -53,7 +55,11 @@
                     ],
                     toolbar1: 'undo redo | styles bold italic | alignleft aligncenter alignright alignjustify | outdent indent | preview code',
                     toolbar2: 'paste copy cut | codesample image | link anchor',
+                    autosave_prefix: "tinymce-autosave-article-content-",
+                    autosave_interval: "20s",
+                    autosave_restore_when_empty: true,
                     image_advtab: true,
+                    autosave_retention: "10080m",
                     // 上传图片
                     images_upload_handler: (blobInfo, progress) => new Promise(async (resolve, reject) => {
                         let formData = new FormData()

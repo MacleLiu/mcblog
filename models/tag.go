@@ -140,7 +140,7 @@ func GetTagArticles(tid int, pageSize, pageNum int) ([]Article, int64, error) {
 	// 将文章标签关联表和标签表结合成一个新的衍生表
 	// query := db.Table("article_tag").Select("art_id", "tag_id").Joins("join tag on article_tag.tag_id = tag.id").Where("tag.id = ?", tid)
 	// err := db.Preload("Tag").Model(&arts).Select("id", "created_at", "title", "cid", "desc").Joins("join (?) q on article.id = q.art_id", query).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
-	err := db.Preload("Category").Model(&arts).Select("article.id", "created_at", "title", "cid", "desc").Joins("join article_tag on article.id = article_tag.art_id AND article_tag.tag_id = ?", tid).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+	err := db.Preload("Category").Model(&arts).Select("article.id", "created_at", "title", "cid", "desc").Joins("join article_tag on article.id = article_tag.art_id AND article_tag.tag_id = ?", tid).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("created_at DESC").Find(&arts).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return arts, 0, errno.New(errno.ERROR, err)
 	}

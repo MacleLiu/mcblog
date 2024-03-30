@@ -23,8 +23,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   #app {
-    height: 100%;
+    min-height: 100%;
+  }
+  
+  /* 重写默认样式 */
+  html, body {
+    width: 100%;
+    min-height: 100%;
   }
 </style>

@@ -1,4 +1,5 @@
 <template>
+    <div class="headerWrapper">
     <a-row class="headerRow">
 
         <a-col :xs="4" :sm="6" :md="6" :lg="4">
@@ -37,10 +38,10 @@
             </div>
         </a-col>
     </a-row>
+    </div>
 </template>
 
 <script>
-
     export default {
         methods: {
             menuIcon() {
@@ -58,8 +59,18 @@
 </script>
 
 <style scoped>
+    .headerWrapper {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000; /* 堆叠属性，确保头部在页面上方 */
+        background-color: white; /* 添加背景色，以确保头部内容清晰可见 */
+        box-shadow: 0px 8px 8px -8px rgb(200, 200, 200); /* 添加阴影效果 */
+    }
     .headerRow {
-        height: 7%;
+        top: 0;
+        height: 60px;
         flex: 0 0 auto;
         display: flex;
         padding: 0 40px;
