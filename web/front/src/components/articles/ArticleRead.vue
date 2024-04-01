@@ -484,6 +484,7 @@ export default {
 :deep a {
     white-space: pre-line;
 }
+/* 解决锚点跳转后被顶部导航栏遮挡问题 */
 :deep #articleContent h1 {
     padding-top: 70px;
     margin-top: -70px;
