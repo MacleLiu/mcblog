@@ -8,7 +8,7 @@
         <h2>个人介绍</h2>
         <p style="font-size: 16px; color: black;">
             你好，我是Macle。<br>
-            正在计算机知识的海洋里漂泊。<br>
+            爱好学点计算机技术。<br>
             喜欢骑行。<br>
             喜欢火锅。<br>
             喜欢天蓝色。<br>

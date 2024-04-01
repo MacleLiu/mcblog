@@ -13,7 +13,7 @@
 
       <FrontFooter/>
       <div>
-        <a-back-top :visibilityHeight="600"/>
+        <a-back-top :visibilityHeight="100"/>
       </div>
 </div>
 </template>

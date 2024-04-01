@@ -13,7 +13,7 @@
 <style scoped>
 .footerRow {
     flex: 0 0 auto;
-    min-height: 70px;
+    min-height: 80px;
     background-color: rgb(40, 40, 40);
     color: white;
     text-align: center;

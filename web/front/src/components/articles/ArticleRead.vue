@@ -71,7 +71,7 @@
                                 <a-avatar 
                                   size="large"
                                   slot="avatar"
-                                  style="color: white; backgroundColor: skyblue; font-size: 25px;"
+                                  style="color: white; background-color: skyblue; font-size: 25px;"
                                   alt="头像"
                                 >
                                     {{ new_comment.name ? new_comment.name.charAt(0) : "U" }}
@@ -111,7 +111,7 @@
                                     <span slot="actions" @click="handleReply(item.ID, item.name)">回复</span>
                                     <a-avatar 
                                       slot="avatar"
-                                      style="color: white; backgroundColor: skyblue; font-size: 25px;"
+                                      style="color: white; background-color: skyblue; font-size: 25px;"
                                       alt="头像"
                                     > 
                                         {{ item.name ? item.name.charAt(0) : "U" }}
@@ -128,7 +128,7 @@
                                         <span slot="actions" @click="handleReply(item.ID, child.name)">回复</span>
                                         <a-avatar 
                                           slot="avatar"
-                                          style="color: white; backgroundColor: skyblue; font-size: 25px;"
+                                          style="color: white; background-color: skyblue; font-size: 25px;"
                                           alt="头像"
                                         > 
                                             {{ child.name ? child.name.charAt(0) : "U" }}
@@ -154,7 +154,7 @@
                 <a-avatar 
                   size="large"
                   slot="avatar"
-                  style="color: white; backgroundColor: skyblue; font-size: 25px;"
+                  style="color: white; background-color: skyblue; font-size: 25px;"
                   alt="头像"
                 >
                     {{ reply_comment.name ? reply_comment.name.charAt(0) : "U" }}
@@ -175,7 +175,7 @@
         <!-- </div> -->
         <FrontFooter/>
         <div>
-            <a-back-top :visibilityHeight="600"/>
+            <a-back-top :visibilityHeight="100"/>
         </div>
     </div>
 </template>
@@ -483,5 +483,10 @@ export default {
 }
 :deep a {
     white-space: pre-line;
+}
+/* 解决锚点定位，固定导航栏遮挡问题 */
+.h1 .h2 .h3{
+    padding-top: 60px;  /* padding 影响锚点元素的定位，使用 padding 调整锚点元素跳转后的位置 */
+    margin-top: -60px;  /* margin 不影响锚点元素的定位，使用 margin 抵消 padding 对布局的影响。 */
 }
 </style>
