@@ -54,7 +54,7 @@
                             <span>{{ artInfo.Category.name }}</span>
                         </div>
                         <!-- 文章内容 -->
-                        <div ref="content" v-html="artInfo.content" style="width: 100%; font-size: 16px; color: black;"></div>
+                        <div id="articleContent" ref="content" v-html="artInfo.content" style="width: 100%; font-size: 16px; color: black;"></div>
                         <hr style="width: 100%; border: 1px dashed skyblue;">
                         <!-- 文章标签 -->
                         <div style="width: 100%;">
@@ -384,14 +384,14 @@ export default {
             this.replyVisible = false
         },
         // 生成带锚点的文章目录
-        generateDirectory() {
-            console.log('generateDirectory')
-            const article_content = this.$refs.content  // 获取文章内容
-            article_content.childNodes.forEach((e, index) => {
-                //具体执行步骤
-                console.log(e)
-            })
-        },
+        // generateDirectory() {
+        //     console.log('generateDirectory')
+        //     const article_content = this.$refs.content  // 获取文章内容
+        //     article_content.childNodes.forEach((e, index) => {
+        //         //具体执行步骤
+        //         console.log(e)
+        //     })
+        // },
         // 阻止点击目录的默认事件修改路由
         handleAnchorClick(e) {
           e.preventDefault()
@@ -484,9 +484,16 @@ export default {
 :deep a {
     white-space: pre-line;
 }
-/* 解决锚点定位，固定导航栏遮挡问题 */
-.h1 .h2 .h3{
-    padding-top: 60px;  /* padding 影响锚点元素的定位，使用 padding 调整锚点元素跳转后的位置 */
-    margin-top: -60px;  /* margin 不影响锚点元素的定位，使用 margin 抵消 padding 对布局的影响。 */
+:deep #articleContent h1 {
+    padding-top: 70px;
+    margin-top: -70px;
+}
+:deep #articleContent h2 {
+    padding-top: 70px;
+    margin-top: -70px;
+}
+:deep #articleContent h3 {
+    padding-top: 70px;
+    margin-top: -70px;
 }
 </style>
