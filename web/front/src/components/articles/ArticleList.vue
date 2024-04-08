@@ -24,6 +24,7 @@
 
 <script>
 export default {
+    props: ['keyword'],
     data() {
         return {
             loading: true,
@@ -44,7 +45,7 @@ export default {
             queryParam: {
                 pagesize: 10,
                 pagenum: 1,
-                title: '',
+                keyword: this.keyword,
             },
             artlist: [],
             size: 'middle',
@@ -58,7 +59,7 @@ export default {
                     params: {
                         pagesize: this.queryParam.pagesize,
                         pagenum: this.queryParam.pagenum,
-                        title: this.queryParam.title,
+                        keyword: this.queryParam.keyword,
                     },
                 })
                 if (res.status != 200){

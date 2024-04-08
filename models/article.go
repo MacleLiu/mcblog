@@ -10,9 +10,9 @@ import (
 type Article struct {
 	gorm.Model
 	Category Category `gorm:"foreignKey:Cid"`
-	Title    string   `gorm:"type:varchar(100);not null" json:"title"`
+	Title    string   `gorm:"type:varchar(100);not null;index:idx_fulltext, class:FULLTEXT, option:WITH PARSER ngram" json:"title"`
 	Cid      int      `gorm:"type:int;not null" json:"cid"`
-	Desc     string   `gorm:"type:varchar(200)" json:"desc"`
+	Desc     string   `gorm:"type:varchar(200);index:idx_fulltext, class:FULLTEXT, option:WITH PARSER ngram" json:"desc"`
 	Content  string   `gorm:"type:longtext" json:"content"`
 	Img      string   `gorm:"type:varchar(100)" json:"img"`
 	Winnow   bool     `gorm:"type:bool;default:false" json:"winnow"`
@@ -66,15 +66,15 @@ func GetAllArtInfo() ([]Article, error) {
 	return arts, nil
 }
 
-// 查询文章列表(分页或标题模糊匹配)
-func GetArticles(pageSize, pageNum int, title string) ([]Article, int64, error) {
+// 查询文章列表(分页或关键词全文索引查询)
+func GetArticles(pageSize, pageNum int, keyword string) ([]Article, int64, error) {
 	var arts []Article
 	var total int64
 	var err error
-	if title == "" {
+	if keyword == "" {
 		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("created_at DESC").Find(&arts).Error
 	} else {
-		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Where("title LIKE ?", title+"%").Order("created_at DESC").Find(&arts).Count(&total).Error
+		err = db.Preload("Category").Model(&arts).Select("id", "created_at", "title", "cid", "desc", "img", "winnow").Where("MATCH(`title`, `desc`) AGAINST(? IN NATURAL LANGUAGE MODE)", keyword).Order("created_at DESC").Find(&arts).Count(&total).Error
 	}
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0, errno.New(errno.ERROR, err)
@@ -133,8 +133,7 @@ func DeleteArticle(id int) error {
 
 // 设置精选文章
 func SetWinnow(id int) error {
-	var err error
-	db.Exec("UPDATE article SET winnow = NOT winnow Where id = ?", id)
+	err := db.Exec("UPDATE article SET winnow = NOT winnow Where id = ?", id).Error
 	if err != nil {
 		return errno.New(errno.ERROR, err)
 	}

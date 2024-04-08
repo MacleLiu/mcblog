@@ -5,8 +5,8 @@
             <a-row :gutter="20">
                 <a-col :span="6">
                     <a-input-search 
-                        v-model="queryParam.title" 
-                        placeholder="输入标题查找" 
+                        v-model="queryParam.keyword" 
+                        placeholder="输入关键词查询" 
                         enter-button 
                         @search="getArtList"
                         allowClear 
@@ -114,7 +114,7 @@
                 queryParam: {
                     pagesize: 10,
                     pagenum: 1,
-                    title: '',
+                    keyword: '',
                 },
                 artlist: [],
                 catelist: [],
@@ -150,7 +150,7 @@
                     params: {
                         pagesize: this.queryParam.pagesize,
                         pagenum: this.queryParam.pagenum,
-                        title: this.queryParam.title,
+                        keyword: this.queryParam.keyword,
                     },
                 })
                 if (res.status != 200) return this.$message.error(res.msg)

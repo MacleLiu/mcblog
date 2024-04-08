@@ -10,7 +10,9 @@
 
         <a-col :xs="14" :sm="12" :md="14" :lg="8">
             <div class="inputContainer">
-                <a-input-search placeholder="搜索" style="max-width: 200px; width: auto; min-width: 0; flex: auto;" @search="onSearch" />
+                <a-input-search v-model="keyword" placeholder="搜索" allowClear
+                    style="max-width: 200px; width: auto; min-width: 0; flex: auto;" @search="onSearch" 
+                />
             </div>
         </a-col>
 
@@ -43,6 +45,11 @@
 
 <script>
     export default {
+        data() {
+          return {
+            keyword: '',
+          }
+        },
         methods: {
             menuIcon() {
                 return <a-icon type="menu" />
@@ -53,7 +60,9 @@
             goToPage(item) {
                 this.$router.push('/blog/' + item.key).catch((err) => err )
             },
-            onSearch() {},
+            onSearch() {
+                this.$router.push('/blog/search/' + this.keyword).catch((err) => err )
+            },
         }
     }
 </script>

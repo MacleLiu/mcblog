@@ -45,7 +45,7 @@ func GetArticle(ctx *gin.Context) {
 func GetArticles(ctx *gin.Context) {
 	pageSize, _ := strconv.Atoi(ctx.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(ctx.Query("pagenum"))
-	title := ctx.Query("title")
+	keyword := ctx.Query("keyword")
 
 	switch {
 	case pageSize >= 100:
@@ -58,7 +58,7 @@ func GetArticles(ctx *gin.Context) {
 		pageNum = 1
 	}
 
-	arts, total, err := models.GetArticles(pageSize, pageNum, title)
+	arts, total, err := models.GetArticles(pageSize, pageNum, keyword)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": errno.GetCode(err),

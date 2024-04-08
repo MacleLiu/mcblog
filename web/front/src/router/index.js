@@ -13,6 +13,7 @@ import FrontAbout from '../components/about/FrontAbout'
 import ArticleRead from '../components/articles/ArticleRead'
 import CateList from '../components/articles/CateList'
 import TagList from '../components/articles/TagList'
+import ArticleList from '@/components/articles/ArticleList.vue'
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,8 @@ const routes = [
             {path: 'about', component: FrontAbout},
             {path: 'cate/:cid', component: CateList, props: true},
             {path: 'tag/:tid', component: TagList, props: true},
+            {path: 'search/:keyword', component: ArticleList, props: true},
+            {path: 'search/', component: ArticleList},
         ]
     },
     {
