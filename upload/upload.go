@@ -22,11 +22,11 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, error) {
 
 	cfg := storage.Config{}
 	// 空间对应的机房
-	cfg.Region = &storage.ZoneBeimei
+	cfg.Region = getRegionByName(config.AppConfig.QiNiu.Region)
 	// 是否使用https域名
-	cfg.UseHTTPS = true
+	cfg.UseHTTPS = config.AppConfig.QiNiu.UseHttps
 	// 上传是否使用CDN上传加速
-	cfg.UseCdnDomains = false
+	cfg.UseCdnDomains = config.AppConfig.QiNiu.UseCdnDomains
 
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}
@@ -39,4 +39,27 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, error) {
 	}
 
 	return config.AppConfig.QiNiu.QiNiuServer + "/" + ret.Key, nil
+}
+
+// 将配置文件中空间机房位置配置做映射
+// 映射 region 字段为 storage.Zone 对象
+func getRegionByName(name string) *storage.Region {
+	switch name {
+	case "Huadong":
+		return &storage.ZoneHuadong
+	case "Huabei":
+		return &storage.ZoneHuabei
+	case "Huanan":
+		return &storage.ZoneHuanan
+	case "Beimei":
+		return &storage.ZoneBeimei
+	case "Xinjiapo":
+		return &storage.ZoneXinjiapo
+	case "ShouEr1":
+		return &storage.ZoneShouEr1
+	case "ZheJiang2":
+		return &storage.ZoneHuadongZheJiang2
+	default:
+		return nil // 或者 return &storage.ZoneHuadong 做默认处理
+	}
 }

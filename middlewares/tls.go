@@ -8,7 +8,7 @@ import (
 func TlsHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		secureMiddleware := secure.New(secure.Options{
-			SSLRedirect: true,
+			SSLRedirect: false,
 			SSLHost:     "macle:8888",
 		})
 		err := secureMiddleware.Process(c.Writer, c.Request)

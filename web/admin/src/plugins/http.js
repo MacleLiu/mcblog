@@ -3,6 +3,7 @@ import axios from 'axios'
 import router from '../router/index'
 
 // let Url = '后端接口地址'
+let Url = "http://localhost:8888/api/v1/"
 
 axios.defaults.baseURL = Url
 

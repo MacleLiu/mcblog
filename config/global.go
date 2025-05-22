@@ -22,10 +22,13 @@ type Mysql struct {
 }
 
 type QiNiu struct {
-	AccessKey   string `toml:"access_key"`
-	SecretKey   string `toml:"secret_key"`
-	Bucket      string `toml:"bucket"`
-	QiNiuServer string `toml:"qiniu_server"`
+	AccessKey     string `toml:"access_key"`
+	SecretKey     string `toml:"secret_key"`
+	Bucket        string `toml:"bucket"`
+	QiNiuServer   string `toml:"qiniu_server"`
+	Region        string `toml:"region"`
+	UseHttps      bool   `toml:"use_https"`
+	UseCdnDomains bool   `toml:"use_cdn_domains"`
 }
 
 var AppConfig Config

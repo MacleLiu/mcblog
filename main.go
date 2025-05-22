@@ -10,10 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Config struct {
-	AppModel string `toml:"app_model"`
-	AppPort  string `toml:"app_port"`
-}
+// type Config struct {
+// 	AppModel string `toml:"app_model"`
+// 	AppPort  string `toml:"app_port"`
+// }
 
 func main() {
 	//初始化数据库
@@ -31,6 +31,6 @@ func main() {
 	//fmt.Println(config.AppConfig)
 
 	fmt.Println("服务初始化完成")
-	r.RunTLS(config.AppConfig.Server.AppPort, "cacert.pem", "privkey.pem")
-	// r.Run(config.AppConfig.Server.AppPort)
+	// r.RunTLS(config.AppConfig.Server.AppPort, "cacert.pem", "privkey.pem")
+	r.Run(config.AppConfig.Server.AppPort)
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-// let Url = '后端接口地址'
+let Url = 'http://localhost:8888/api/v1/'
 
 axios.defaults.baseURL = Url
 

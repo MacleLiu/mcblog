@@ -21,3 +21,6 @@ access_key = ""
 secret_key = ""
 bucket = ""
 qiniu_server = ""
+region = ''  # 空间对应的机房，可选值Huadong、Huanan、Huabei、Beimei、Xinjiapo、ShouEr1、Zhejiang2
+use_https = false  # 是否使用https域名
+use_cdn_domains = false  # 上传是否使用CDN上传加速
